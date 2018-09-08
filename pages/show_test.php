@@ -80,7 +80,7 @@ require 'connection.php'; ?>
                           </div>
                         </div>
 
-                        <div class="col-lg-12 table-bordered">
+                        <div class="col-lg-12 table-bordered table-responsive">
                           <table class="table table-hover">
                             <thead class="thead-dark">
                                 <tr>
