@@ -3,6 +3,7 @@ require 'connection.php';
 if ($_POST) {
   $topic = $_POST["topic"];
   $link = $_POST["link"];
+  $slink = $_POST["slink"];
   $detail = $_POST["detail"];
   $json = $_POST["data"];
 
@@ -11,7 +12,7 @@ if ($_POST) {
   $sql_insert_topic = "INSERT INTO test(topic, detail) values('$topic', '$detail')";
   if ($conn->query($sql_insert_topic) === TRUE) {
     $topic_last_id = $conn->insert_id;
-    $sql_insert_video = "INSERT INTO video(link, test_id) values('$link', $topic_last_id)";
+    $sql_insert_video = "INSERT INTO video(link, slink, test_id) values('$link', '$slink', $topic_last_id)";
     $conn->query($sql_insert_video);
     foreach($json as $qa) { //foreach element in $arr
       $question = $qa["question"];
