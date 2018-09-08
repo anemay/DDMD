@@ -14,7 +14,7 @@ if ($_POST) {
     $obj["data"] = $data;
     // create session
     $_SESSION["email"] = $data["email"];
-    
+
     echo json_encode($obj);
   } else {
     $obj["result"] = false;

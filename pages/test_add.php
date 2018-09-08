@@ -93,6 +93,9 @@
                     <div class="col-md-5">
                       <iframe width="100%" height="230px" src="https://www.youtube.com/embed/aJOTlE1K90k" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                     </div>
+                    <div class="col-md-12" align="center">
+                      <button class="btn btn-primary" id="btn-confirm" type="button" data-toggle="modal" data-target="#modal-confirm">ยืนยันการสร้างแบบทดสอบ</button>
+                    </div>
                     <div class="col-md-12">
                       <h1 class="page-header">เพิ่มคำถามในแบบทดสอบ</h1>
                       <div class="col-md-12">
@@ -106,6 +109,7 @@
                           </div>
                       </div>
                     </div>
+                    <input type="text" id="temp">
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -145,55 +149,20 @@
     <script src="../dist/js/sb-admin-2.js"></script>
 
     <script>
+
+    $(document).ready(function(){
+      var title = getUrlParameter('title');
+      var message = getUrlParameter('message');
+      if (title !== undefined && message !== undefined) {
+        $('#modal-message').modal('show');
+        $('#message-title').text(title);
+        $('#message-content').text(message);
+      }
+    })
+
       $('#btn-add-question').on('click', function(){
-        var topiclength = $('.questio-topic').length;
+        var topiclength = $('.question-topic').length;
         var topicNumber = topiclength + 1;
-
-        var arr = [];
-        $('.question-topic').each(function(index){
-          var num = index + 1;
-          var questionTopic = $(this).val();
-          var answerA = $('.answerA')[index].value;
-          var answerB = $('.answerB')[index].value;
-          var answerC = $('.answerC')[index].value;
-          var answerD = $('.answerD')[index].value;
-          var correctAns = $('input[name=correct'+num+']:checked').val();
-
-          item = {}
-          item["question"] = questionTopic;
-          item["choices"] = [];
-
-          a = {}
-          a["answer"] = answerA;
-          if (correctAns == 0) {
-            a["correct"] = 1;
-          }
-          item["choice"].push(a);
-
-          b = {}
-          b["answer"] = answerB;
-          if (correctAns == 1) {
-            b["correct"] = 1;
-          }
-          item["choice"].push(b);
-
-          c = {}
-          c["answer"] = answerC;
-          if (correctAns == 2) {
-            c["correct"] = 1;
-          }
-          item["choice"].push(c);
-
-          d = {}
-          d["answer"] = answerD;
-          if (correctAns == 3) {
-            d["correct"] = 1;
-          }
-          item["choice"].push(d);
-
-          arr.push(item);
-
-        })
 
         var mainContent = $('#question-content');
         var mainDiv = $('<div class="col-md-6"></div>').appendTo(mainContent);
@@ -223,7 +192,143 @@
         $('<div class="col-sm-6"><input type="text" class="form-control answerD" id="" placeholder="คำถาม ง"></div>').appendTo(divAnswerD);
         $('<div class="col-sm-2"><div class="radio"><label><input type="radio" name="correct'+topicNumber+'" id="optionsRadios1" value="3">ข้อถูก</label></div></div>').appendTo(divAnswerD);
       })
+
+      $('#btn-confirm').on('click', function() {
+        var arr = [];
+        $('.question-topic').each(function(index){
+          var num = index + 1;
+          var questionTopic = $(this).val();
+          var answerA = $('.answerA')[index].value;
+          var answerB = $('.answerB')[index].value;
+          var answerC = $('.answerC')[index].value;
+          var answerD = $('.answerD')[index].value;
+          var correctAns = $('input[name=correct'+num+']:checked').val();
+
+          item = {}
+          item["question"] = questionTopic;
+          item["choices"] = [];
+
+          a = {}
+          a["answer"] = answerA;
+          if (correctAns == 0) {
+            a["correct"] = 1;
+          }
+          item["choices"].push(a);
+
+          b = {}
+          b["answer"] = answerB;
+          if (correctAns == 1) {
+            b["correct"] = 1;
+          }
+          item["choices"].push(b);
+
+          c = {}
+          c["answer"] = answerC;
+          if (correctAns == 2) {
+            c["correct"] = 1;
+          }
+          item["choices"].push(c);
+
+          d = {}
+          d["answer"] = answerD;
+          if (correctAns == 3) {
+            d["correct"] = 1;
+          }
+          item["choices"].push(d);
+          arr.push(item);
+        })
+
+        var modalBody = $('#modal-body-confirm');
+        modalBody.html('');
+
+        var topic = $('#idstory').val();
+        var link = $('#link').val();
+        var detail = $('#detail').val();
+        var error = 0;
+
+        if (topic.trim() == "") {
+          $('<div class="alert alert-danger" role="alert">- กรุณากรอกหัวข้อแบบทดสอบ</div>').appendTo(modalBody);
+          $('#btn-modal-confirm').hide();
+          error++;
+        }
+
+        if (link.trim() == "") {
+          $('<div class="alert alert-danger" role="alert">- กรุณาระบุลิงค์วิดิโอ</div>').appendTo(modalBody);
+          $('#btn-modal-confirm').hide();
+          error++;
+        }
+
+        if (arr.length < 5) {
+          $('<div class="alert alert-danger" role="alert">- กรุณาเพิ่มคำถามในแบบทดสอบอย่างน้อย 5 ข้อ</div>').appendTo(modalBody);
+          $('#btn-modal-confirm').hide();
+          error++;
+        }
+
+        if (error == 0) {
+          $('<div class="alert alert-success" role="alert">ข้อมูลครบถ้วน กรุณากดยืนยันในการสร้างแบบทดสอบ</div>').appendTo(modalBody);
+          $('#btn-modal-confirm').show();
+        } else {
+
+        }
+
+        $('#btn-modal-confirm').on('click', function() {
+          $.ajax({
+            url: "service-test-add.php",
+            type: "post",
+            dataType: "json",
+            data: {
+              topic: topic,
+              link: link,
+              detail: detail,
+              data: arr
+            }, success: function(resp) {
+              if (resp.result) {
+                window.location = "test_add.php?title=การบันทึกแบบทดสอบเสร็จสมบูรณ์";
+              }
+            }, error: function(error) {
+              console.log(error);
+            }
+          })
+        })
+      })
     </script>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">ยืนยันการสร้างแบบทดสอบ</h4>
+          </div>
+          <div class="modal-body" id="modal-body-confirm">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+            <button type="button" class="btn btn-primary" id="btn-modal-confirm">ยืนยัน</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-message" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="message-title"></h4>
+          </div>
+          <div class="modal-body" id="message-content">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 </body>
 
