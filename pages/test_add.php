@@ -109,7 +109,7 @@
                           </div>
                       </div>
                     </div>
-                    <input type="text" id="temp">
+
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -157,6 +157,20 @@
         $('#modal-message').modal('show');
         $('#message-title').text(title);
         $('#message-content').text(message);
+      }
+      function getUrlParameter(sParam) {
+          var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+              sURLVariables = sPageURL.split('&'),
+              sParameterName,
+              i;
+
+          for (i = 0; i < sURLVariables.length; i++) {
+              sParameterName = sURLVariables[i].split('=');
+
+              if (sParameterName[0] === sParam) {
+                  return sParameterName[1] === undefined ? true : sParameterName[1];
+              }
+          }
       }
     })
 
@@ -283,7 +297,7 @@
               data: arr
             }, success: function(resp) {
               if (resp.result) {
-                window.location = "test_add.php?title=การบันทึกแบบทดสอบเสร็จสมบูรณ์";
+                window.location = "test_add.php?title=บันทึกแบบทดสอบ&message=การบันทึกแบบทดสอบเสร็จสมบูรณ์";
               }
             }, error: function(error) {
               console.log(error);
