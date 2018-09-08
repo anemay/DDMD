@@ -5,7 +5,9 @@
             <li>
                 <a href="index.php"><i class="fa fa-home fa-fw"></i> หน้าหลัก</a>
             </li>
-            <?php if (isset($_SESSION["email"])) { ?>
+
+            <!-- สำหรับ admin -->
+            <?php if (isset($_SESSION["admin"])) { ?>
             <li>
                 <a href="#"><i class="fa fa-user fa-fw"></i> การจัดการข้อมูลสมาชิก<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
@@ -82,7 +84,10 @@
             <li>
                 <a href="service-logout.php"><i class="fa fa-sign-out fa-fw"></i> ออกจากระบบ</a>
             </li>
-          <?php } else if (isset($_SESSION["email"])) { ?>
+          <?php } ?>
+
+            <!-- สำหรับ user ธรรมดา -->
+            <?php if (!isset($_SESSION["admin"]) && isset($_SESSION["email"])) { ?>
             <li>
                 <a href="forms.html"><i class="fa fa-pencil-square-o fa-fw"></i> ทำแบบทดสอบ</a>
             </li>
@@ -92,12 +97,16 @@
                     <li>
                         <a href="#"><i class="fa fa-pencil fa-fw"></i> แก้ไข</a>
                     </li>
+                    <li>
+                        <a href="#"><i class="fa fa-minus fa-fw"></i> เปลี่ยนรหัสผ่าน</a>
+                    </li>
                 </ul>
             </li>
             <li>
                 <a href="service-logout.php"><i class="fa fa-sign-out fa-fw"></i> ออกจากระบบ</a>
             </li>
           <?php } ?>
+
         </ul>
     </div>
     <!-- /.sidebar-collapse -->

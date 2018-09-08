@@ -96,6 +96,12 @@ if (isset($_GET["id"])) {
                             <input type="text" class="form-control" id="link" value="<?=$link;?>" placeholder="ลิ้งค์(URL)" maxlength="50">
                           </div>
                         </div>
+                        <div class="form-group">
+                          <label for="" class="col-sm-2 control-label">ตัวอย่าง(URL)</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control" id="slink" placeholder="ลิ้งค์ตัวอย่าง(URL)" maxlength="50">
+                          </div>
+                        </div>
 
                         <div class="form-group">
                           <label for="" class="col-sm-2 control-label">รายละเอียด</label>
@@ -105,9 +111,7 @@ if (isset($_GET["id"])) {
                         </div>
                       </form>
                     </div>
-                    <div class="col-md-5">
-                      <iframe width="100%" height="230px" src="https://www.youtube.com/embed/aJOTlE1K90k" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                    </div>
+
                     <div class="col-md-12" align="center">
                       <button class="btn btn-primary" id="btn-confirm" type="button" data-toggle="modal" data-target="#modal-confirm">ยืนยันการสร้างแบบทดสอบ</button>
                     </div>
@@ -272,6 +276,7 @@ if (isset($_GET["id"])) {
 
         var topic = $('#idstory').val();
         var link = $('#link').val();
+        var slink = $('#slink').val();
         var detail = $('#detail').val();
         var error = 0;
 
@@ -308,6 +313,7 @@ if (isset($_GET["id"])) {
             data: {
               topic: topic,
               link: link,
+              slink: slink,
               detail: detail,
               data: arr
             }, success: function(resp) {
