@@ -1,4 +1,19 @@
-<?php session_start(); ?>
+<?php session_start();
+require 'connection.php';
+$topic="";
+$link = "";
+$detail = "";
+if (isset($_GET["id"])) {
+  $id = $_GET["id"];
+  $sql = "SELECT * FROM test where id=$id";
+  $result = $conn->query($sql);
+    if ($result->num_rows > 0) { //
+      $data = $result->fetch_assoc();
+      $topic = $data["topic"];
+      $detail = $data["detail"];
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -72,13 +87,13 @@
                         <div class="form-group">
                           <label for="" class="col-sm-2 control-label">ชื่อเรื่อง</label>
                           <div class="col-sm-10">
-                            <input type="text" class="form-control" id="idstory" placeholder="ชื่อเรื่อง" maxlength="13">
+                            <input type="text" class="form-control" id="idstory" value="<?=$topic;?>" placeholder="ชื่อเรื่อง" maxlength="13">
                           </div>
                         </div>
                         <div class="form-group">
                           <label for="" class="col-sm-2 control-label">ลิ้งค์(URL)</label>
                           <div class="col-sm-10">
-                            <input type="text" class="form-control" id="link" placeholder="ลิ้งค์(URL)" maxlength="50">
+                            <input type="text" class="form-control" id="link" value="<?=$link;?>" placeholder="ลิ้งค์(URL)" maxlength="50">
                           </div>
                         </div>
                         <div class="form-group">
@@ -91,7 +106,7 @@
                         <div class="form-group">
                           <label for="" class="col-sm-2 control-label">รายละเอียด</label>
                           <div class="col-sm-10">
-                            <textarea type="text" class="form-control" id="detail" placeholder="รายละเอียด" maxlength="100" rows="6" style="resize: none;"></textarea>
+                            <textarea  type="text" class="form-control" id="detail"  value="<?=$detail;?>" placeholder="รายละเอียด" maxlength="100" rows="6" style="resize: none;"></textarea>
                           </div>
                         </div>
                       </form>

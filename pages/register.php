@@ -1,4 +1,30 @@
-<?php session_start(); ?>
+<?php session_start();
+require 'connection.php';
+$idcard = "";
+$name = "";
+$lastname = "";
+$age= "";
+$sex = "";
+$status = "";
+$email = "";
+$password = "";
+$type = "";
+if (isset($_GET["id"])) {
+  $id = $_GET["id"];
+  $sql = "SELECT * FROM member where id= $id";
+  $result = $conn->query($sql);
+    if ($result->num_rows > 0) { //
+      $data = $result->fetch_assoc();
+      $idcard = $data["idcard"];
+      $name = $data["name"];
+      $lastname = $data["lastname"];
+      $age = $data["age"];
+      $sex = $data["sex"];
+      $email = $data["email"];
+      $password = $data["password"];
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -64,19 +90,25 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">สมัครสมาชิก</h1>
+                  <?php if(!isset($_GET["id"])) {
+                    echo '<h1 class="page-header">สมัครสมาชิก</h1>';
+                  } else {
+                      echo '<h1 class="page-header">แก้ไขสมาชิก</h1>';
+                  } ?>
+
+
                     <div class="col-md-5 col-md-offset-2">
                       <form class="form-horizontal">
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">รหัสประชาชน</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" id="idcard" placeholder="รหัสประชาชน" maxlength="13">
+                            <input type="text" class="form-control" id="idcard" value="<?= $idcard;?>" placeholder="รหัสประชาชน" maxlength="13">
                           </div>
                         </div>
                         <div class="form-group">
                           <label for="inputPassword3" class="col-sm-3 control-label">คำนำหน้าชื่อ</label>
                           <div class="col-sm-9">
-                            <select id="prefix" class="form-control">
+                            <select id="prefix" class="form-control" >
                               <option value="1">เด็กชาย</option>
                               <option value="2">เด็กหญิง</option>
                               <option value="3">นาย</option>
@@ -88,13 +120,13 @@
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">ชื่อ</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" id="name" placeholder="ชื่อ" maxlength="50">
+                            <input type="text" class="form-control" id="name" value="<?=$name;?>"placeholder="ชื่อ" maxlength="50">
                           </div>
                         </div>
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">นามสกุล</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" id="lastname" placeholder="นามสกุล" maxlength="50">
+                            <input type="text" class="form-control" id="lastname" value="<?=$lastname;?>" placeholder="นามสกุล" maxlength="50">
                           </div>
                         </div>
                         <div class="form-group">
@@ -139,13 +171,17 @@
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">อีเมล</label>
                           <div class="col-sm-9">
-                            <input type="email" class="form-control" id="email" placeholder="อีเมล" maxlength="50">
+                            <input type="email" class="form-control" id="email" value="<?=$email;?>" placeholder="อีเมล" maxlength="50">
                           </div>
                         </div>
+
+                                            <?php if (!isset($_GET["id"])) { ?>
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">รหัสผ่าน</label>
                           <div class="col-sm-9">
-                            <input type="password" class="form-control" id="password" placeholder="รหัสผ่าน" >
+
+                              <input type="password" class="form-control" id="password" value="<?=$password;?>"placeholder="รหัสผ่าน" >
+
                           </div>
                         </div>
                         <div class="form-group">
@@ -154,6 +190,7 @@
                             <input type="password" class="form-control" id="confirmpassword" placeholder="ยืนยันรหัสผ่าน" >
                           </div>
                         </div>
+                      <?php } ;?>
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label"></label>
                           <div class="col-sm-9">
