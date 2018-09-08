@@ -70,6 +70,7 @@ require 'connection.php'; ?>
                       <form class="form-horizontal" action="report.php" method="get">
 
                         <div class="form-group">
+<<<<<<< HEAD
                           <label for="" class="col-sm-2 control-label">ค้นหา</label>
                           <div class="col-sm-5">
                               <input type="text" class="form-control" id="search" name="search" placeholder="ชื่อ-นามสกุล" maxlength="13">
@@ -77,11 +78,20 @@ require 'connection.php'; ?>
 
                           <div class="col-sm-5">
                               <button type="button" id="btn-register" class="btn btn-primary">ค้นหา</button>
+=======
+                          <label for="inputPassword3" class="col-sm-3 control-label">ประเภทบุคคล</label>
+                          <div class="col-sm-4">
+                            <select id="prefix" class="form-control" >
+                              <option value="1">นักเรียน</option>
+                              <option value="2">อาจารย์</option>
+                              <option value="3">บุคคลทั่วไป</option>
+                            </select>
+>>>>>>> 67ffd1cf3fef7b997b70bc7f9f15d184c1bcde64
                           </div>
                         </div>
 
-                        <div class="col-lg-12 table-responsive">
-                          <table class="table table-hover">
+                      <div class="col-lg-12 table-responsive">
+                          <table class="table table-hover table-bordered">
                             <thead>
                                 <tr>
                                   <th>ลำดับ</th>
@@ -111,8 +121,7 @@ require 'connection.php'; ?>
                                       echo '<td>'.$row["email"].'</td>';
                                       echo '<td>';
                                       ?>
-                                        <button type="button" class="btn btn-warning"><a href="register.php?id=<?php echo $row['id']; ?>"><i class="fa fa-pencil"></i></button>
-                                        <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                                      <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-print  " aria-hidden="true"></span></button>
                                       <?php
                                       echo '</td>';
                                       echo '</tr>';
@@ -122,12 +131,17 @@ require 'connection.php'; ?>
                                  ?>
 
                               </tbody>
+                              </table>
+                          <div class="col-sm-6 col-md-offset-4">
+                              <button ty pe="button" class="btn btn-primary">รายชื่อสมาชิกทั้งหมด</button>
+                              <button ty pe="button" class="btn btn-primary">5 อันดับแรก</button>
+                          </div>
 
-                          </table>
+
                         </div>
 
                         <div class="form-group">
-                          <label for="" class="col-sm-3 control-label"></label>
+                          <label for="" class="col-sm-2 control-label"></label>
                           <div class="col-sm-9">
                             <div class="alert alert-danger" style="display: none" id="alert" role="alert"></div>
                           </div>
