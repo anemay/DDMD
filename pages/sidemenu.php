@@ -13,12 +13,9 @@
                         <a href="register.php"><i class="fa fa-plus fa-fw"></i> เพิ่ม</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-pencil fa-fw"></i> แก้ไข</a>
+                        <a href="member-edit.php"><i class="fa fa-pencil fa-fw"></i>ข้อมูลสมาชิก</a>
                     </li>
-                    <li>
-                        <a href="#"><i class="fa fa-minus fa-fw"></i> ลบ</a>
-                    </li>
-                </ul>
+                    </ul>
                 <!-- /.nav-second-level -->
             </li>
 
@@ -26,15 +23,12 @@
                 <a href="tables.html"><i class="fa fa-th-list   fa-fw"></i> การจัดการคะแนน<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
-                        <a href="#"><i class="fa fa-plus fa-fw"></i> เพิ่ม</a>
+                        <a href="score.php"><span class="glyphicon glyphicon-align-left  " aria-hidden="true"></span> คะแนน</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-pencil fa-fw"></i> แก้ไข</a>
+                        <a href="#"><i class="fa fa-sort-amount-desc  "></i> ประมวลผลคะแนน</a>
                     </li>
-                    <li>
-                        <a href="#"><i class="fa fa-minus fa-fw"></i> ลบ</a>
-                    </li>
-                </ul>
+                    </ul>
             </li>
             <li>
                 <a href="forms.html"><i class="fa fa-pencil-square-o fa-fw"></i> การจัดการแบบทดสอบ<span class="fa arrow"></span></a>
@@ -43,10 +37,7 @@
                         <a href="test_add.php"><i class="fa fa-plus fa-fw"></i> เพิ่ม</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-pencil fa-fw"></i> แก้ไข</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-minus fa-fw"></i> ลบ</a>
+                        <a href="show_test.php"><i class="fa fa-book"></i> แสดงแบบทดสอบ</a>
                     </li>
                 </ul>
             </li>
@@ -83,6 +74,11 @@
                     </li>
                 </ul>
             </li>
+
+            <li>
+                <a href="report.php"><i class="fa fa-print  fa-fw"></i> รายงานข้อมูล </span></a>
+            </li>
+
             <li>
                 <a href="service-logout.php"><i class="fa fa-sign-out fa-fw"></i> ออกจากระบบ</a>
             </li>
