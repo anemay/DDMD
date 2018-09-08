@@ -80,7 +80,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Video ตัวอย่าง</h1>
-                    <iframe width="100%" height="600" src="https://www.youtube.com/embed/GsixldKj8uc?ecver=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <iframe width="100%" height="600" src="https://www.youtube.com/embed/mgXnWynhNE8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
               </div>
                 <!-- /.col-lg-12 -->
             </div>
