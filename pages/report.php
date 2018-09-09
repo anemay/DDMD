@@ -73,7 +73,7 @@ require 'connection.php'; ?>
 
                           <label for="" class="col-sm-2 control-label">ค้นหา</label>
                           <div class="col-sm-5">
-                              <input type="text" class="form-control" id="search" name="search" placeholder="ชื่อ-นามสกุล" maxlength="13">
+                              <input type="text" class="form-control" id="search" name="search" placeholder="ชื่อ-นามสกุล">
                           </div>
 
                           <div class="col-sm-5">

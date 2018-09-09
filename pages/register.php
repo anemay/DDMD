@@ -123,40 +123,48 @@ if (isset($_GET["id"])) {
                             </select>
                           </div>
                         </div>
+
+                        <!-- Name -->
                         <div class="form-group">
-                          <label f            or="" class="col-sm-3 control-label">ชื่อ</label>
+                          <label for="" class="col-sm-3 control-label">ชื่อ</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" id="name" value="<?=$name;?>"placeholder="ชื่อ" maxlength="50">
                           </div>
                         </div>
+
+                        <!-- Surname -->
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">นามสกุล</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" id="lastname" value="<?=$lastname;?>" placeholder="นามสกุล" maxlength="50">
                           </div>
                         </div>
+
+                        <!-- AGE -->
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">อายุ</label>
                         <div class="col-sm-9">
-                          <select class="form-control" name="age">
+
                             <?php
                               $sql = "SELECT * FROM age";
                               $result = $conn->query($sql);
                               if ($result->num_rows > 0){
                                 while ($row = $result->fetch_assoc()) {
-                                  echo '<option value="'.$row["id"].'">'.$row["age"].'</option>';
+                                  echo '<label class="radio-inline">';
+                                  echo '<input type="radio" name="radio-age" value="'.$row["id"].'">'.$row["age"].'</input>';
+                                  echo '</label>';
                                 }
                               }
                             ?>
-                          </select>
-                        </div>
-
-
 
                         </div>
+                        </div>
+
+                        <!-- TYPE -->
                         <div class="form-group">
                           <label for="inputPassword3" class="col-sm-3 control-label">ประเภทบุคคล</label>
                           <div class="col-sm-9">
+
                             <select class="form-control" name="type">
                               <?php
                                 $sql = "SELECT * FROM type";
@@ -171,20 +179,26 @@ if (isset($_GET["id"])) {
                           </div>
                         </div>
 
+                        <!-- SEX -->
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">เพศ</label>
-                          <div class="col-sm-9">
-                            <label class="radio-inline">
-                              <input type="radio" name="radio-sex" id="inlineRadio1" value="1"> ชาย
-                            </label>
-                            <label class="radio-inline">
-                              <input type="radio" name="radio-sex" id="inlineRadio2" value="2"> หญิง
-                            </label>
-                            <label class="radio-inline">
-                              <input type="radio" name="radio-sex" id="inlineRadio3" value="3"> ไม่ระบุเพศ
-                            </label>
-                          </div>
+                        <div class="col-sm-9">
+                            <?php
+                              $sql = "SELECT * FROM sex";
+                              $result = $conn->query($sql);
+                              if ($result->num_rows > 0){
+                                while ($row = $result->fetch_assoc()) {
+                                  echo '<label class="radio-inline">';
+                                  echo '<input type="radio" name="radio-sex" value="'.$row["id"].'">'.$row["sex"].'</input>';
+                                  echo '</label>';
+                                }
+                              }
+                            ?>
                         </div>
+                        </div>
+
+
+                        <!-- EMAIL -->
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">อีเมล</label>
                           <div class="col-sm-9">

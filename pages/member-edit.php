@@ -11,7 +11,7 @@ require 'connection.php'; ?>
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+    <title>RMUTK</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -65,64 +65,69 @@ require 'connection.php'; ?>
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">รายชื่อข้อมูลสมาชิก</h1>
+                    <h1 class="page-header">รายงานข้อมูล</h1>
                     <div class="col-md-10 col-md-offset-1">
-                      <form class="form-horizontal">
+                      <form class="form-horizontal" action="member-edit1.php" method="get">
 
                         <div class="form-group">
+
                           <label for="" class="col-sm-2 control-label">ค้นหา</label>
                           <div class="col-sm-5">
-                              <input type="text" class="form-control" id="idcard" placeholder="ชื่อ-นามสกุล" maxlength="13">
+                              <input type="text" class="form-control" id="search" name="search" placeholder="ชื่อ-นามสกุล">
                           </div>
 
                           <div class="col-sm-5">
-                              <button type="button" id="btn-register" class="btn btn-primary">ค้นหา</button>
-                          </div>
-                        </div>
+                              <button type="submit" id="btn-register" class="btn btn-primary">ค้นหา</button>
+                            </div>
 
-                        <div class="col-lg-12 table-responsive">
-                          <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                  <th>ลำดับ</th>
-                                  <th>ชื่อ</th>
-                                  <th>นามสกุล</th>
-                                  <th>อีเมล</th>
-                                  <th>อื่นๆ</th>
-                                </tr>
-                              </thead>
+                            <div class="col-lg-12 table-responsive">
+                              <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                      <th>ลำดับ</th>
+                                      <th>ชื่อ</th>
+                                      <th>นามสกุล</th>
+                                      <th>อีเมล</th>
+                                      <th>อื่นๆ</th>
+                                    </tr>
+                                  </thead>
 
-                              <tbody>
-                                <?php
-                                  $sql = "SELECT * FROM member";
-                                  $result = $conn->query($sql);
-                                  if ($result->num_rows > 0) {
-                                    $count = 1;
-                                    while ($row = $result->fetch_assoc()) {
-                                      echo '<tr>';
-                                      echo '<td>'.$count.'</td>';
-                                      echo '<td>'.$row["name"].'</td>';
-                                      echo '<td>'.$row["lastname"].'</td>';
-                                      echo '<td>'.$row["email"].'</td>';
-                                      echo '<td>';
-                                      ?>
-                                        <button type="button" class="btn btn-warning"><a href="register.php?id=<?php echo $row['id']; ?>"><i class="fa fa-pencil"></i></button>
-                                        <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
-                                      <?php
-                                      echo '</td>';
-                                      echo '</tr>';
-                                      $count++;
+                                  <tbody>
+                                    <?php
+                                    $where = "";
+                                    if (isset($_GET["search"])) {
+                                      $search = $_GET["search"];
+                                      $where .= " WHERE name like '%$search%' or lastname like '%$search%'";
                                     }
-                                  }
-                                 ?>
+                                      $sql = "SELECT * FROM member $where";
+                                      $result = $conn->query($sql);
+                                      if ($result->num_rows > 0) {
+                                        $count = 1;
+                                        while ($row = $result->fetch_assoc()) {
+                                          echo '<tr>';
+                                          echo '<td>'.$count.'</td>';
+                                          echo '<td>'.$row["name"].'</td>';
+                                          echo '<td>'.$row["lastname"].'</td>';
+                                          echo '<td>'.$row["email"].'</td>';
+                                          echo '<td>';
+                                          ?>
+                                            <button type="button" class="btn btn-warning"><a href="register.php?id=<?php echo $row['id']; ?>"><i class="fa fa-pencil"></i></button>
+                                            <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                                          <?php
+                                          echo '</td>';
+                                          echo '</tr>';
+                                          $count++;
+                                        }
+                                      }
+                                     ?>
 
-                              </tbody>
+                                  </tbody>
 
-                          </table>
-                        </div>
+                              </table>
+                            </div>
 
                         <div class="form-group">
-                          <label for="" class="col-sm-3 control-label"></label>
+                          <label for="" class="col-sm-2 control-label"></label>
                           <div class="col-sm-9">
                             <div class="alert alert-danger" style="display: none" id="alert" role="alert"></div>
                           </div>
