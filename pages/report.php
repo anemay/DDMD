@@ -11,7 +11,7 @@ require 'connection.php'; ?>
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+    <title>RMUTK</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -70,7 +70,7 @@ require 'connection.php'; ?>
                       <form class="form-horizontal" action="report.php" method="get">
 
                         <div class="form-group">
-<<<<<<< HEAD
+
                           <label for="" class="col-sm-2 control-label">ค้นหา</label>
                           <div class="col-sm-5">
                               <input type="text" class="form-control" id="search" name="search" placeholder="ชื่อ-นามสกุล" maxlength="13">
@@ -78,16 +78,14 @@ require 'connection.php'; ?>
 
                           <div class="col-sm-5">
                               <button type="button" id="btn-register" class="btn btn-primary">ค้นหา</button>
-=======
-                          <label for="inputPassword3" class="col-sm-3 control-label">ประเภทบุคคล</label>
-                          <div class="col-sm-4">
-                            <select id="prefix" class="form-control" >
-                              <option value="1">นักเรียน</option>
-                              <option value="2">อาจารย์</option>
-                              <option value="3">บุคคลทั่วไป</option>
-                            </select>
->>>>>>> 67ffd1cf3fef7b997b70bc7f9f15d184c1bcde64
-                          </div>
+                              <label for="inputPassword3" class="col-sm-3 control-label">ประเภทบุคคล</label>
+                              <div class="col-sm-4">
+                                <select id="prefix" class="form-control" >
+                                  <option value="1">นักเรียน</option>
+                                  <option value="2">อาจารย์</option>
+                                  <option value="3">บุคคลทั่วไป</option>
+                                </select>
+                              </div>
                         </div>
 
                       <div class="col-lg-12 table-responsive">
