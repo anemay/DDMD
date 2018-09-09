@@ -51,7 +51,7 @@
               <a class="navbar-brand ">
                 <form class="form-inline">
                 <img src="img/Logo.png" alt="" width="35px" height="35px" class="d-inline-block align-top">
-                </form>  
+                </form>
               </a>
             </div>
             <!-- /.navbar-header -->
@@ -171,7 +171,9 @@
           $('#message-title').text(title);
           $('#message-content').text(message);
         }
+
       })
+
       function getUrlParameter(sParam) {
           var sPageURL = decodeURIComponent(window.location.search.substring(1)),
               sURLVariables = sPageURL.split('&'),

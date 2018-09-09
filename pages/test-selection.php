@@ -1,13 +1,15 @@
 <?php session_start();
 require 'connection.php';
+$allowSkip = false;
 if (isset($_GET["id"])) {
   $testId = $_GET["id"];
-  $sql_select_test = "SELECT * FROM test WHERE id = $testId";
+  $sql_select_test = "SELECT * FROM test, video WHERE test.id = $testId and test.id = video.test_id";
   $result = $conn->query($sql_select_test);
   if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $topic = $row["topic"];
     $detail = $row["detail"];
+    $link = $row["link"];
   }
 }
 ?>
@@ -81,26 +83,43 @@ if (isset($_GET["id"])) {
                     <h1 class="page-header"><?= $topic; ?></h1>
                     <?php
                       $memberId = $_SESSION["member_id"];
-                      $sql_select_score_pre = "SELECT * FROM score WHERE member_id = $memberId and test_id = $testId and type = 0";
+                      $sql_select_score_pre = "SELECT * FROM score WHERE member_id = $memberId and test_id = $testId and score_type = 1";
                       $resultScore = $conn->query($sql_select_score_pre);
-                      if (!$resultScore) {
+                      if ($resultScore->num_rows > 0) {
+                        $sql_select_score_post = "SELECT * FROM score WHERE member_id = $memberId and test_id = $testId and score_type = 2";
+                        $resultCheck = $conn->query($sql_select_score_post);
+                        if ($resultCheck->num_rows > 0) {
+                          $allowSkip = true;
+                        }
+                        echo '<div class="col-md-12" id="player"></div>';
+                        if ($allowSkip) {
+                          echo '<form action="test-todo.php" method="post">
+                            <div class="col-md-12" align="center" style="margin-top: 10px">
+                              <input type="hidden" name="test_id" value="'.$testId.'">
+                              <input type="hidden" name="test_type" value="post_test">
+                              <button type="submit" id="btn-post-test" class="btn btn-default btn-lg">
+                                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> แบบทดสอบหลังเรียน
+                              </button>
+                            </div>
+                          <form>';
+                        } else {
+                          echo '<form action="test-todo.php" method="post">
+                            <div class="col-md-12" align="center" style="margin-top: 10px">
+                              <input type="hidden" name="test_id" value="'.$testId.'">
+                              <input type="hidden" name="test_type" value="post_test">
+                              <button type="submit" id="btn-post-test" style="display:none" class="btn btn-default btn-lg">
+                                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> แบบทดสอบหลังเรียน
+                              </button>
+                            </div>
+                          <form>';
+                        }
+                      } else {
                         echo '<form action="test-todo.php" method="post">
                           <div class="col-md-12" align="center">
                             <input type="hidden" name="test_id" value="'.$testId.'">
                             <input type="hidden" name="test_type" value="pre_test">
                             <button type="submit" id="btn-post-test" class="btn btn-default btn-lg">
                               <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> แบบทดสอบก่อนเรียน
-                            </button>
-                          </div>
-                        <form>';
-                      } else {
-                        echo '<div class="col-md-12" id="player"></div>';
-                        echo '<form action="test-todo.php" method="post">
-                          <div class="col-md-12" align="center" style="margin-top: 10px">
-                            <input type="hidden" name="test_id" value="'.$testId.'">
-                            <input type="hidden" name="test_type" value="post_test">
-                            <button type="submit" id="btn-post-test" style="display:none" class="btn btn-default btn-lg">
-                              <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> แบบทดสอบหลังเรียน
                             </button>
                           </div>
                         <form>';
@@ -170,17 +189,16 @@ if (isset($_GET["id"])) {
     </div>
 
     <script>
-
         // create youtube player
         var player;
         function onYouTubePlayerAPIReady() {
             player = new YT.Player('player', {
               height: '390',
               width: '640',
-              videoId: 'mgXnWynhNE8',
+              videoId: qs('v'),
               playerVars: {
                   'autoplay': 0,
-                  'controls': 0,
+                  'controls': <?= $allowSkip ? 1 : 0; ?>,
                   'rel' : 0,
                   'fs' : 0,
               },
@@ -189,6 +207,12 @@ if (isset($_GET["id"])) {
                 'onStateChange': onPlayerStateChange
               }
             });
+        }
+
+        function qs(key) {
+            key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta chars
+            var match = ('<?= $link;?>').match(new RegExp("[?&]"+key+"=([^&]+)(&|$)"));
+            return match && decodeURIComponent(match[1].replace(/\+/g, " "));
         }
 
         // autoplay video
