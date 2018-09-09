@@ -159,7 +159,8 @@ if (isset($_GET["id"])) {
                                   echo '<form class="form-horizontal">';
                                   echo '<div class="form-group">';
                                   echo '<label for="" class="col-sm-2 control-label">ข้อที่ '. $topicNumber .'</label>';
-                                  echo '<div class="col-sm-9"><input type="text" class="form-control question-topic" id="" value="'.$question.'" placeholder="คำถามข้อที่ '. $topicNumber++ .'"></div>';
+                                  echo '<div class="col-sm-9"><input type="text" class="form-control question-topic" id="" value="'.$question.'" placeholder="คำถามข้อที่ '. $topicNumber .'"></div>';
+                                  echo '<input type="hidden" name="questionId'.$topicNumber.'" value="'.$qid.'">';
                                   echo '</div>';
 
                                   $sqlAnswer = "SELECT * FROM answer WHERE question_id = $qid";
@@ -167,6 +168,7 @@ if (isset($_GET["id"])) {
                                   $answerNumber = 1;
                                   while($ans = $resultAnswer->fetch_assoc()) {
                                     $answer = $ans["answer"];
+                                    $ansId = $ans["id"];
                                     $textNumber = "";
                                     $textEn = "";
                                     if ($answerNumber == 1) {
@@ -182,15 +184,24 @@ if (isset($_GET["id"])) {
                                       $textNumber = "ง";
                                       $textEn = "D";
                                     }
+
+                                    $checked = "";
+                                    if ($ans["correct"] == 1) {
+                                      $checked = " checked";
+                                    }
                                     echo '<div class="form-group">';
                                     echo '<label for="" class="col-md-3 control-label">'.$textNumber.'.</label>';
                                     echo '<div class="col-sm-6"><input type="text" class="form-control answer'.$textEn.'" id="" value="'.$answer.'" placeholder="คำถาม '.$textNumber.'"></div>';
+                                    echo '<div class="col-sm-2"><div class="radio"><label><input type="radio" name="correct'.$topicNumber.'" id="optionsRadios1" value="'.($answerNumber - 1).'" '.$checked.'>ข้อถูก</label></div></div>';
+                                    echo '<input type="hidden" name="correctId'.$topicNumber.'" value="'.$ansId.'">';
                                     echo '</div>';
+
                                     $answerNumber++;
                                   }
 
                                   echo '</form>';
                                   echo '</div>';
+                                  $topicNumber++;
                                 }
                               }
                              ?>
@@ -393,7 +404,7 @@ if (isset($_GET["id"])) {
               data: arr
             }, success: function(resp) {
               if (resp.result) {
-                window.location = "test_add.php?title=บันทึกแบบทดสอบ&message=การบันทึกแบบทดสอบเสร็จสมบูรณ์";
+                window.location = "show_test.php?title=บันทึกแบบทดสอบ&message=การบันทึกแบบทดสอบเสร็จสมบูรณ์";
               }
             }, error: function(error) {
               console.log(error);
@@ -407,14 +418,19 @@ if (isset($_GET["id"])) {
         $('.question-topic').each(function(index){
           var num = index + 1;
           var questionTopic = $(this).val();
+          var questionId = $('input[name=questionId'+num+']').val();
+          //console.log('qid: ' + questionId);
           var answerA = $('.answerA')[index].value;
           var answerB = $('.answerB')[index].value;
           var answerC = $('.answerC')[index].value;
           var answerD = $('.answerD')[index].value;
+
           var correctAns = $('input[name=correct'+num+']:checked').val();
+          var correctId = $('input[name=correctId'+num+']').val();
 
           item = {}
           item["question"] = questionTopic;
+          item["question_id"] = questionId;
           item["choices"] = [];
 
           a = {}
@@ -422,28 +438,43 @@ if (isset($_GET["id"])) {
           if (correctAns == 0) {
             a["correct"] = 1;
           }
-          item["choices"].push(a);
 
           b = {}
           b["answer"] = answerB;
           if (correctAns == 1) {
             b["correct"] = 1;
           }
-          item["choices"].push(b);
 
           c = {}
           c["answer"] = answerC;
           if (correctAns == 2) {
             c["correct"] = 1;
           }
-          item["choices"].push(c);
 
           d = {}
           d["answer"] = answerD;
           if (correctAns == 3) {
             d["correct"] = 1;
           }
+
+
+          $('input[name=correctId'+num+']').each(function(index) {
+            if (index == 0) {
+              a["id"] = $(this).val();
+            } else if (index == 1) {
+              b["id"] = $(this).val();
+            } else if (index == 2) {
+              c["id"] = $(this).val();
+            } else {
+              d["id"] = $(this).val();
+            }
+          })
+
+          item["choices"].push(a);
+          item["choices"].push(b);
+          item["choices"].push(c);
           item["choices"].push(d);
+
           arr.push(item);
         })
 

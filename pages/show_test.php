@@ -243,7 +243,49 @@ require 'connection.php'; ?>
             $('#loading-dialog').modal('hide');
         }
       }
+
+      $(document).ready(function(){
+        var title = getUrlParameter('title');
+        var message = getUrlParameter('message');
+        if (title !== undefined && message !== undefined) {
+          $('#modal-message').modal('show');
+          $('#message-title').text(title);
+          $('#message-content').text(message);
+        }
+        function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        }
+      })
     </script>
+    <!-- Modal -->
+    <div class="modal fade" id="modal-message" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="message-title"></h4>
+          </div>
+          <div class="modal-body" id="message-content">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
 </body>
 
