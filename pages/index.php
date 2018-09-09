@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>RMUTK</title>
+    <title>PROJECT DDMD</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -40,15 +40,19 @@
 
     <div id="wrapper">
         <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar navbar-default "  role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.php">Project: DDMD</a>
+              </button>
+              <a class="navbar-brand ">
+                <form class="form-inline">
+                <img src="img/Logo.png" alt="" width="35px" height="35px" class="d-inline-block align-top">
+                </form>  
+              </a>
             </div>
             <!-- /.navbar-header -->
 
