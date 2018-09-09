@@ -108,17 +108,23 @@ if (isset($_GET["id"])) {
                         <div class="form-group">
                           <label for="inputPassword3" class="col-sm-3 control-label">คำนำหน้าชื่อ</label>
                           <div class="col-sm-9">
-                            <select id="prefix" class="form-control" >
-                              <option value="1">เด็กชาย</option>
-                              <option value="2">เด็กหญิง</option>
-                              <option value="3">นาย</option>
-                              <option value="4">นาง</option>
-                              <option value="5">นางสาว</option>
+
+                            <!-- <select id="prefix" class="form-control" > -->
+                            <select class="form-control" name="prefix">
+                              <?php
+                                $sql = "SELECT * FROM prefix";
+                                $result = $conn->query($sql);
+                                if ($result->num_rows > 0){
+                                  while ($row = $result->fetch_assoc()) {
+                                    echo '<option value="'.$row["id"].'">'.$row["prefix"].'</option>';
+                                  }
+                                }
+                              ?>
                             </select>
                           </div>
                         </div>
                         <div class="form-group">
-                          <label for="" class="col-sm-3 control-label">ชื่อ</label>
+                          <label f            or="" class="col-sm-3 control-label">ชื่อ</label>
                           <div class="col-sm-9">
                             <input type="text" class="form-control" id="name" value="<?=$name;?>"placeholder="ชื่อ" maxlength="50">
                           </div>
@@ -131,25 +137,36 @@ if (isset($_GET["id"])) {
                         </div>
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">อายุ</label>
-                          <div class="col-sm-9">
-                            <label class="radio-inline">
-                              <input type="radio" name="radio-age" id="inlineRadio1" value="1"> 10-15 ปี
-                            </label>
-                            <label class="radio-inline">
-                              <input type="radio" name="radio-age" id="inlineRadio2" value="2"> 16-20 ปี
-                            </label>
-                            <label class="radio-inline">
-                              <input type="radio" name="radio-age" id="inlineRadio3" value="3"> 20 ปีขึ้นไป
-                            </label>
-                          </div>
+                        <div class="col-sm-9">
+                          <select class="form-control" name="age">
+                            <?php
+                              $sql = "SELECT * FROM age";
+                              $result = $conn->query($sql);
+                              if ($result->num_rows > 0){
+                                while ($row = $result->fetch_assoc()) {
+                                  echo '<option value="'.$row["id"].'">'.$row["age"].'</option>';
+                                }
+                              }
+                            ?>
+                          </select>
+                        </div>
+
+
+
                         </div>
                         <div class="form-group">
                           <label for="inputPassword3" class="col-sm-3 control-label">ประเภทบุคคล</label>
                           <div class="col-sm-9">
-                            <select id="type" class="form-control">
-                              <option value="1">นักเรียน</option>
-                              <option value="2">อาจารย์</option>
-                              <option value="3">บุคคลทั่วไป</option>
+                            <select class="form-control" name="type">
+                              <?php
+                                $sql = "SELECT * FROM type";
+                                $result = $conn->query($sql);
+                                if ($result->num_rows > 0){
+                                  while ($row = $result->fetch_assoc()) {
+                                    echo '<option value="'.$row["id"].'">'.$row["type"].'</option>';
+                                  }
+                                }
+                              ?>
                             </select>
                           </div>
                         </div>
@@ -175,12 +192,12 @@ if (isset($_GET["id"])) {
                           </div>
                         </div>
 
-                                            <?php if (!isset($_GET["id"])) { ?>
+                        <?php if (!isset($_GET["id"])) { ?>
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">รหัสผ่าน</label>
                           <div class="col-sm-9">
 
-                              <input type="password" class="form-control" id="password" value="<?=$password;?>"placeholder="รหัสผ่าน" >
+                        <input type="password" class="form-control" id="password" value="<?=$password;?>"placeholder="รหัสผ่าน" >
 
                           </div>
                         </div>
