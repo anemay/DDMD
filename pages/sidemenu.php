@@ -33,7 +33,7 @@
                     </ul>
             </li>
             <li>
-                <a href="forms.html"><i class="fa fa-pencil-square-o fa-fw"></i> การจัดการแบบทดสอบ<span class="fa arrow"></span></a>
+                <a href="test-display.php"><i class="fa fa-pencil-square-o fa-fw"></i> การจัดการแบบทดสอบ<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
                         <a href="test_add.php"><i class="fa fa-plus fa-fw"></i> เพิ่ม</a>
@@ -89,7 +89,7 @@
             <!-- สำหรับ user ธรรมดา -->
             <?php if (!isset($_SESSION["admin"]) && isset($_SESSION["email"])) { ?>
             <li>
-                <a href="forms.html"><i class="fa fa-pencil-square-o fa-fw"></i> ทำแบบทดสอบ</a>
+                <a href="test-display.php"><i class="fa fa-pencil-square-o fa-fw"></i> ทำแบบทดสอบ</a>
             </li>
             <li>
                 <a href="#"><i class="fa fa-group   fa-fw"></i> การจัดการข้อมูลผู้ใช้<span class="fa arrow"></span></a>

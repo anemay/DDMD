@@ -70,15 +70,17 @@ require 'connection.php'; ?>
                   $result = $conn->query($sql_select_test);
                   if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
+                      $id = $row["id"];
+                      $detail = mb_strimwidth($row["detail"], 0, 300, "...");
                       echo '<div class="col-md-4">';
                       echo '<div class="col-md-12 well">';
                       echo '<h4>'.$row["topic"].'</h4>';
                       echo '<hr>';
-                      echo '<h5>'.$row["detail"].'</h5><br/>';
+                      echo '<h5>'.$detail.'</h5><br/>';
                       echo '<div align="right">';
-                      echo '<button type="button" class="btn btn-default">
+                      echo '<a href="test-selection.php?id='.$id.'" type="button" class="btn btn-default">
   <span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span> ทำแบบทดสอบ
-</button>';
+</a>';
                       echo '</div>';
                       echo '</div>';
                       echo '</div>';

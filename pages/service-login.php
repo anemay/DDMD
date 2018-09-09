@@ -19,6 +19,7 @@ if ($_POST) {
     $obj["result"] = true;
     $obj["data"] = $data;
     // create session
+    $_SESSION["member_id"] = $data["id"];
     $_SESSION["email"] = $data["email"];
 
     if ($pos > 0) {
