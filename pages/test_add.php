@@ -2,15 +2,18 @@
 require 'connection.php';
 $topic="";
 $link = "";
+$slink = "";
 $detail = "";
 if (isset($_GET["id"])) {
   $id = $_GET["id"];
-  $sql = "SELECT * FROM test where id=$id";
+  $sql = "SELECT * FROM test, video where test.id = $id and test.id = video.test_id";
   $result = $conn->query($sql);
     if ($result->num_rows > 0) { //
       $data = $result->fetch_assoc();
       $topic = $data["topic"];
       $detail = $data["detail"];
+      $link = $data["link"];
+      $slink = $data["slink"];
     }
 }
 ?>
@@ -80,14 +83,20 @@ if (isset($_GET["id"])) {
             <div class="row">
                 <div class="col-md-12">
                     <div class="col-md-12">
-                      <h1 class="page-header">เพิ่มแบบทดสอบ</h1>
+                      <?php
+                        if (isset($_GET["id"])) {
+                          echo '<h1 class="page-header">แก้ไขแบบทดสอบ</h1>';
+                        } else {
+                          echo '<h1 class="page-header">เพิ่มแบบทดสอบ</h1>';
+                        }
+                       ?>
                     </div>
                     <div class="col-md-7">
                       <form class="form-horizontal">
                         <div class="form-group">
                           <label for="" class="col-sm-2 control-label">ชื่อเรื่อง</label>
                           <div class="col-sm-10">
-                            <input type="text" class="form-control" id="idstory" value="<?=$topic;?>" placeholder="ชื่อเรื่อง" maxlength="13">
+                            <input type="text" class="form-control" id="idstory" value="<?=$topic;?>" placeholder="ชื่อเรื่อง">
                           </div>
                         </div>
                         <div class="form-group">
@@ -99,23 +108,30 @@ if (isset($_GET["id"])) {
                         <div class="form-group">
                           <label for="" class="col-sm-2 control-label">ตัวอย่าง(URL)</label>
                           <div class="col-sm-10">
-                            <input type="text" class="form-control" id="slink" placeholder="ลิ้งค์ตัวอย่าง(URL)" maxlength="50">
+                            <input type="text" class="form-control" id="slink" placeholder="ลิ้งค์ตัวอย่าง(URL)" value="<?=$slink;?>"  maxlength="50">
                           </div>
                         </div>
 
                         <div class="form-group">
                           <label for="" class="col-sm-2 control-label">รายละเอียด</label>
                           <div class="col-sm-10">
-                            <textarea  type="text" class="form-control" id="detail"  value="<?=$detail;?>" placeholder="รายละเอียด" maxlength="100" rows="6" style="resize: none;"></textarea>
+                            <textarea  type="text" class="form-control" id="detail"  value="<?=$detail;?>" placeholder="รายละเอียด" rows="6" style="resize: none;"><?= $detail; ?></textarea>
                           </div>
                         </div>
                       </form>
                     </div>
 
                     <div class="col-md-12" align="center">
-                      <button class="btn btn-primary" id="btn-confirm" type="button" data-toggle="modal" data-target="#modal-confirm">ยืนยันการสร้างแบบทดสอบ</button>
+                      <?php if (isset($_GET["id"])) {
+                        echo '<button class="btn btn-primary" id="btn-update" type="button" data-toggle="modal" data-target="#modal-confirm">ยืนยันการแก้ไขแบบทดสอบ</button>';
+                      } else {
+                        echo '<button class="btn btn-primary" id="btn-confirm" type="button" data-toggle="modal" data-target="#modal-confirm">ยืนยันการสร้างแบบทดสอบ</button>';
+                      }
+                      ?>
+
                     </div>
                     <div class="col-md-12">
+                      <?php if (!isset($_GET["id"])) { ?>
                       <h1 class="page-header">เพิ่มคำถามในแบบทดสอบ</h1>
                       <div class="col-md-12">
                           <div id="question-content">
@@ -127,6 +143,76 @@ if (isset($_GET["id"])) {
                             </button>
                           </div>
                       </div>
+                    <?php } else { ?>
+                      <h1 class="page-header">แก้ไขคำถามในแบบทดสอบ</h1>
+                      <div class="col-md-12">
+                          <div id="question-content">
+                            <?php
+                              $sqlQuestion = "SELECT * FROM question WHERE test_id = $id";
+                              $resultQuestion = $conn->query($sqlQuestion);
+                              if ($resultQuestion->num_rows > 0) {
+                                $topicNumber = 1;
+                                while($row = $resultQuestion->fetch_assoc()) {
+                                  $question = $row["question"];
+                                  $qid = $row["id"];
+                                  echo '<div class="col-md-6">';
+                                  echo '<form class="form-horizontal">';
+                                  echo '<div class="form-group">';
+                                  echo '<label for="" class="col-sm-2 control-label">ข้อที่ '. $topicNumber .'</label>';
+                                  echo '<div class="col-sm-9"><input type="text" class="form-control question-topic" id="" value="'.$question.'" placeholder="คำถามข้อที่ '. $topicNumber .'"></div>';
+                                  echo '<input type="hidden" name="questionId'.$topicNumber.'" value="'.$qid.'">';
+                                  echo '</div>';
+
+                                  $sqlAnswer = "SELECT * FROM answer WHERE question_id = $qid";
+                                  $resultAnswer = $conn->query($sqlAnswer);
+                                  $answerNumber = 1;
+                                  while($ans = $resultAnswer->fetch_assoc()) {
+                                    $answer = $ans["answer"];
+                                    $ansId = $ans["id"];
+                                    $textNumber = "";
+                                    $textEn = "";
+                                    if ($answerNumber == 1) {
+                                      $textNumber = "ก";
+                                      $textEn = "A";
+                                    } else if ($answerNumber == 2) {
+                                      $textNumber = "ข";
+                                      $textEn = "B";
+                                    } else if ($answerNumber == 3) {
+                                      $textNumber = "ค";
+                                      $textEn = "C";
+                                    } else if ($answerNumber == 4) {
+                                      $textNumber = "ง";
+                                      $textEn = "D";
+                                    }
+
+                                    $checked = "";
+                                    if ($ans["correct"] == 1) {
+                                      $checked = " checked";
+                                    }
+                                    echo '<div class="form-group">';
+                                    echo '<label for="" class="col-md-3 control-label">'.$textNumber.'.</label>';
+                                    echo '<div class="col-sm-6"><input type="text" class="form-control answer'.$textEn.'" id="" value="'.$answer.'" placeholder="คำถาม '.$textNumber.'"></div>';
+                                    echo '<div class="col-sm-2"><div class="radio"><label><input type="radio" name="correct'.$topicNumber.'" id="optionsRadios1" value="'.($answerNumber - 1).'" '.$checked.'>ข้อถูก</label></div></div>';
+                                    echo '<input type="hidden" name="correctId'.$topicNumber.'" value="'.$ansId.'">';
+                                    echo '</div>';
+
+                                    $answerNumber++;
+                                  }
+
+                                  echo '</form>';
+                                  echo '</div>';
+                                  $topicNumber++;
+                                }
+                              }
+                             ?>
+                          </div>
+                          <div class="col-md-6 center-vertical">
+                            <button type="button" id="btn-add-question" class="btn btn-success btn-lg">
+                              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> เพิ่มคำถาม
+                            </button>
+                          </div>
+                      </div>
+                    <?php } ?>
                     </div>
 
                 </div>
@@ -318,7 +404,140 @@ if (isset($_GET["id"])) {
               data: arr
             }, success: function(resp) {
               if (resp.result) {
-                window.location = "test_add.php?title=บันทึกแบบทดสอบ&message=การบันทึกแบบทดสอบเสร็จสมบูรณ์";
+                window.location = "show_test.php?title=บันทึกแบบทดสอบ&message=การบันทึกแบบทดสอบเสร็จสมบูรณ์";
+              }
+            }, error: function(error) {
+              console.log(error);
+            }
+          })
+        })
+      })
+
+      $('#btn-update').on('click', function() {
+        var arr = [];
+        $('.question-topic').each(function(index){
+          var num = index + 1;
+          var questionTopic = $(this).val();
+          var questionId = $('input[name=questionId'+num+']').val();
+          //console.log('qid: ' + questionId);
+          var answerA = $('.answerA')[index].value;
+          var answerB = $('.answerB')[index].value;
+          var answerC = $('.answerC')[index].value;
+          var answerD = $('.answerD')[index].value;
+
+          var correctAns = $('input[name=correct'+num+']:checked').val();
+          var correctId = $('input[name=correctId'+num+']').val();
+
+          item = {}
+          item["question"] = questionTopic;
+          item["question_id"] = questionId;
+          item["choices"] = [];
+
+          a = {}
+          a["answer"] = answerA;
+          if (correctAns == 0) {
+            a["correct"] = 1;
+          }
+
+          b = {}
+          b["answer"] = answerB;
+          if (correctAns == 1) {
+            b["correct"] = 1;
+          }
+
+          c = {}
+          c["answer"] = answerC;
+          if (correctAns == 2) {
+            c["correct"] = 1;
+          }
+
+          d = {}
+          d["answer"] = answerD;
+          if (correctAns == 3) {
+            d["correct"] = 1;
+          }
+
+
+          $('input[name=correctId'+num+']').each(function(index) {
+            if (index == 0) {
+              a["id"] = $(this).val();
+            } else if (index == 1) {
+              b["id"] = $(this).val();
+            } else if (index == 2) {
+              c["id"] = $(this).val();
+            } else {
+              d["id"] = $(this).val();
+            }
+          })
+
+          item["choices"].push(a);
+          item["choices"].push(b);
+          item["choices"].push(c);
+          item["choices"].push(d);
+
+          arr.push(item);
+        })
+
+        var modalBody = $('#modal-body-confirm');
+        modalBody.html('');
+
+        var topic = $('#idstory').val();
+        var link = $('#link').val();
+        var slink = $('#slink').val();
+        var detail = $('#detail').val();
+        var error = 0;
+
+        if (topic.trim() == "") {
+          $('<div class="alert alert-danger" role="alert">- กรุณากรอกหัวข้อแบบทดสอบ</div>').appendTo(modalBody);
+          $('#btn-modal-confirm').hide();
+          error++;
+        }
+
+        if (link.trim() == "") {
+          $('<div class="alert alert-danger" role="alert">- กรุณาระบุลิงค์วิดิโอ</div>').appendTo(modalBody);
+          $('#btn-modal-confirm').hide();
+          error++;
+        }
+
+        if (arr.length < 5) {
+          $('<div class="alert alert-danger" role="alert">- กรุณาเพิ่มคำถามในแบบทดสอบอย่างน้อย 5 ข้อ</div>').appendTo(modalBody);
+          $('#btn-modal-confirm').hide();
+          error++;
+        }
+
+        if (error == 0) {
+          $('<div class="alert alert-success" role="alert">ข้อมูลครบถ้วน กรุณากดยืนยันในการสร้างแบบทดสอบ</div>').appendTo(modalBody);
+          $('#btn-modal-confirm').show();
+        } else {
+
+        }
+
+        $('#btn-modal-update').on('click', function() {
+          $.ajax({
+            <?php
+            if (isset($_GET["id"])) {
+              $updateId = $_GET["id"];
+              echo 'url: "service-test-update.php?id='.$updateId.'",';
+            } else {
+                echo 'url: "service-test-update.php",';
+            } ?>
+            type: "post",
+            dataType: "json",
+            data: {
+              topic: topic,
+              link: link,
+              slink: slink,
+              detail: detail,
+              data: arr
+            }, success: function(resp) {
+              if (resp.result) {
+                <?php
+                if (isset($_GET["id"])) {
+                  $updateId = $_GET["id"];
+                  echo 'window.location = "test_add.php?title=แก้ไขแบบทดสอบ&message=แก้ไขแบบทดสอบเสร็จสมบูรณ์&id='.$updateId.'"';
+                } else {
+                  echo 'window.location = "test_add.php?title=แก้ไขแบบทดสอบ&message=แก้ไขแบบทดสอบเสร็จสมบูรณ์"';
+                } ?>
               }
             }, error: function(error) {
               console.log(error);
@@ -341,7 +560,11 @@ if (isset($_GET["id"])) {
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
-            <button type="button" class="btn btn-primary" id="btn-modal-confirm">ยืนยัน</button>
+            <?php if (isset($_GET["id"])) {
+              echo '<button type="button" class="btn btn-primary" id="btn-modal-update">ยืนยัน</button>';
+            } else {
+              echo '<button type="button" class="btn btn-primary" id="btn-modal-confirm">ยืนยัน</button>';
+            } ?>
           </div>
         </div>
       </div>

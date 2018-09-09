@@ -45,7 +45,7 @@
             </li>
 
             <li>
-                <a href="forms.html"><i class="fa fa-pencil-square-o fa-fw"></i> ทำแบบทดสอบ</a>
+                <a href="test-display.php"><i class="fa fa-pencil-square-o fa-fw"></i> ทำแบบทดสอบ</a>
             </li>
 
             <li>

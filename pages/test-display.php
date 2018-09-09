@@ -63,95 +63,29 @@ require 'connection.php'; ?>
         </nav>
 
         <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">รายงานข้อมูล</h1>
-                    <div class="col-md-10 col-md-offset-1">
-                      <form class="form-horizontal" action="report.php" method="get">
-
-                        <div class="form-group">
-
-                          <label for="" class="col-sm-2 control-label">ค้นหา</label>
-                          <div class="col-sm-5">
-                              <input type="text" class="form-control" id="search" name="search" placeholder="ชื่อ-นามสกุล" maxlength="13">
-                          </div>
-
-                          <div class="col-sm-5">
-                              <button type="button" id="btn-register" class="btn btn-primary">ค้นหา</button>
-                              <label for="inputPassword3" class="col-sm-3 control-label">ประเภทบุคคล</label>
-                              <div class="col-sm-4">
-                                <select id="prefix" class="form-control" >
-                                  <option value="1">นักเรียน</option>
-                                  <option value="2">อาจารย์</option>
-                                  <option value="3">บุคคลทั่วไป</option>
-                                </select>
-                              </div>
-                        </div>
-
-                      <div class="col-lg-12 table-responsive">
-                          <table class="table table-hover table-bordered">
-                            <thead>
-                                <tr>
-                                  <th>ลำดับ</th>
-                                  <th>ชื่อ</th>
-                                  <th>นามสกุล</th>
-                                  <th>อีเมล</th>
-                                  <th>อื่นๆ</th>
-                                </tr>
-                              </thead>
-
-                              <tbody>
-                                <?php
-                                  $where = "";
-                                  if (isset($_GET["search"])) {
-                                    $search = $_GET["search"];
-                                    $where .= " WHERE name like '%$search%' or lastname like '%$search%'";
-                                  }
-                                  $sql = "SELECT * FROM member" . $where;
-                                  $result = $conn->query($sql);
-                                  if ($result->num_rows > 0) {
-                                    $count = 1;
-                                    while ($row = $result->fetch_assoc()) {
-                                      echo '<tr>';
-                                      echo '<td>'.$count.'</td>';
-                                      echo '<td>'.$row["name"].'</td>';
-                                      echo '<td>'.$row["lastname"].'</td>';
-                                      echo '<td>'.$row["email"].'</td>';
-                                      echo '<td>';
-                                      ?>
-                                      <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-print  " aria-hidden="true"></span></button>
-                                      <?php
-                                      echo '</td>';
-                                      echo '</tr>';
-                                      $count++;
-                                    }
-                                  }
-                                 ?>
-
-                              </tbody>
-                              </table>
-                          <div class="col-sm-6 col-md-offset-4">
-                              <button ty pe="button" class="btn btn-primary">รายชื่อสมาชิกทั้งหมด</button>
-                              <button ty pe="button" class="btn btn-primary">5 อันดับแรก</button>
-                          </div>
-
-
-                        </div>
-
-                        <div class="form-group">
-                          <label for="" class="col-sm-2 control-label"></label>
-                          <div class="col-sm-9">
-                            <div class="alert alert-danger" style="display: none" id="alert" role="alert"></div>
-                          </div>
-                        </div>
-
-
-                      </form>
-                    </div>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
+          <div class="col-md-12">
+              <h1 class="page-header">รายการทดสอบ</h1>
+              <?php
+                  $sql_select_test = "SELECT * FROM test";
+                  $result = $conn->query($sql_select_test);
+                  if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                      echo '<div class="col-md-4">';
+                      echo '<div class="col-md-12 well">';
+                      echo '<h4>'.$row["topic"].'</h4>';
+                      echo '<hr>';
+                      echo '<h5>'.$row["detail"].'</h5><br/>';
+                      echo '<div align="right">';
+                      echo '<button type="button" class="btn btn-default">
+  <span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span> ทำแบบทดสอบ
+</button>';
+                      echo '</div>';
+                      echo '</div>';
+                      echo '</div>';
+                    }
+                  }
+               ?>
+          </div>
 
         </div>
         <!-- /#page-wrapper -->
