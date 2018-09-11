@@ -12,7 +12,7 @@ if ($_POST) {
 
   // คำสั่งเพิ่มข้อมูล
   $sql = "INSERT INTO member(idcard, prefix, name, lastname, age, sex, email, password)";
-  $sql .= " VALUES('$idcard', $prefix, '$name', '$lastname', $age, $sex, '$email', '$password')";
+  $sql .= " VALUES('$idcard', $prefix, '$name', '$lastname', '$age', $sex, '$email', '$password')";
   $last_id = "";
   if ($conn->query($sql) === TRUE) {
     $last_id = $conn->insert_id;
