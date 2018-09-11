@@ -110,7 +110,7 @@ if (isset($_GET["id"])) {
                           <div class="col-sm-9">
 
                             <!-- <select id="prefix" class="form-control" > -->
-                            <select class="form-control" name="prefix">
+                            <select class="form-control" name="prefix" id="prefix">
                               <?php
                                 $sql = "SELECT * FROM prefix";
                                 $result = $conn->query($sql);
