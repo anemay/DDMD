@@ -165,7 +165,7 @@ if (isset($_GET["id"])) {
                           <label for="inputPassword3" class="col-sm-3 control-label">ประเภทบุคคล</label>
                           <div class="col-sm-9">
 
-                            <select class="form-control" name="type">
+                            <select class="form-control" name="type" id="type">
                               <?php
                                 $sql = "SELECT * FROM type";
                                 $result = $conn->query($sql);
