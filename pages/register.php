@@ -144,7 +144,7 @@ if (isset($_GET["id"])) {
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">อายุ</label>
                         <div class="col-sm-9">
-                            <input class="form-control" type="date" name="bday">
+                            <input class="form-control" type="date" name="age" id="age">
                             <!-- <?php
                               $sql = "SELECT * FROM age";
                               $result = $conn->query($sql);
@@ -285,7 +285,7 @@ if (isset($_GET["id"])) {
           var prefix = $("#prefix").val();
           var name = $('#name').val();
           var lastname = $('#lastname').val();
-          var age = $('input[name=radio-age]:checked').val();
+          var age = $('#age').val();
           var sex = $('input[name=radio-sex]:checked').val();
           var type = $("#type").val();
           var email = $('#email').val();
