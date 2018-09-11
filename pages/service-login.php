@@ -10,7 +10,7 @@ if ($_POST) {
   if ($pos > 0) {
     $sql = "SELECT * FROM admin WHERE email='$email' AND password='$password'";
   } else {
-    $sql = "SELECT * FROM member WHERE email='$email' AND password='$password'";
+    $sql = "SELECT * FROM member WHERE email='$email' AND password='$password' and status = 1";
   }
 
   $result = $conn->query($sql);
@@ -29,7 +29,13 @@ if ($_POST) {
     echo json_encode($obj);
   } else {
     $obj["result"] = false;
-    $obj["message"] = "ไม่พบข้อมูลผู้ใช้ในระบบ";
+    $sql = "SELECT * FROM member WHERE email='$email' AND password='$password' and status = 0";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) { //
+      $obj["message"] = "อีเมล์นี้ ยังไม่ได้ทำการยืนยัน กรุณาเข้าอีเมล์เพื่อยืนยันตัวตน";
+    } else {
+      $obj["message"] = "ไม่พบข้อมูลผู้ใช้ในระบบ";
+    }
     echo json_encode($obj);
   }
 }

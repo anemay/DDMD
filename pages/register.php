@@ -144,8 +144,8 @@ if (isset($_GET["id"])) {
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">อายุ</label>
                         <div class="col-sm-9">
-
-                            <?php
+                            <input class="form-control" type="date" name="bday">
+                            <!-- <?php
                               $sql = "SELECT * FROM age";
                               $result = $conn->query($sql);
                               if ($result->num_rows > 0){
@@ -155,7 +155,7 @@ if (isset($_GET["id"])) {
                                   echo '</label>';
                                 }
                               }
-                            ?>
+                            ?> -->
 
                         </div>
                         </div>

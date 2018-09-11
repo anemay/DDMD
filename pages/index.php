@@ -131,6 +131,9 @@
                 <label for="exampleInputPassword1">Password</label>
                 <input type="password" class="form-control" id="password" placeholder="Password">
               </div>
+              <div class="col-md-12">
+                <div class="alert alert-danger" style="display:none" role="alert" id="message-alert-login"></div>
+              </div>
               <div align="center">
                 <p><a href="register.php" target="_self" style="text-decoration: underline">สมัครสมาชิก</a> | <a href="#" style="text-decoration: underline">ลืมรหัสผ่าน</a></p>
               </div>
@@ -191,6 +194,7 @@
 
       $('#btn-login').on('click', function() {
         // ajax here
+        $('#message-alert-login').hide();
         var email = $('#email').val();
         var password = $('#password').val();
 
@@ -205,9 +209,13 @@
             console.log(resp);
             if (resp.result == true) {
                 window.location = "index.php";
+            } else {
+              var alt = $('#message-alert-login');
+              alt.show();
+              alt.text(resp.message);
             }
           }, error: function(error) {
-            console.log(error);
+
           }
         })
 
