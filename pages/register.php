@@ -186,11 +186,17 @@ if (isset($_GET["id"])) {
                             <?php
                               $sql = "SELECT * FROM sex";
                               $result = $conn->query($sql);
+                              $sexCount = 1;
                               if ($result->num_rows > 0){
                                 while ($row = $result->fetch_assoc()) {
                                   echo '<label class="radio-inline">';
-                                  echo '<input type="radio" name="radio-sex" value="'.$row["id"].'">'.$row["sex"].'</input>';
+                                  if ($sexCount == 1) {
+                                    echo '<input type="radio" name="radio-sex" value="'.$row["id"].'" checked="checked">'.$row["sex"].'</input>';
+                                  } else {
+                                    echo '<input type="radio" name="radio-sex" value="'.$row["id"].'">'.$row["sex"].'</input>';
+                                  }
                                   echo '</label>';
+                                  $sexCount++;
                                 }
                               }
                             ?>
@@ -276,6 +282,27 @@ if (isset($_GET["id"])) {
     <script src="../dist/js/sb-admin-2.js"></script>
 
     <script>
+      $(document).ready(function() {
+        $("#idcard").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                 // Allow: Ctrl/cmd+A
+                (e.keyCode == 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                 // Allow: Ctrl/cmd+C
+                (e.keyCode == 67 && (e.ctrlKey === true || e.metaKey === true)) ||
+                 // Allow: Ctrl/cmd+X
+                (e.keyCode == 88 && (e.ctrlKey === true || e.metaKey === true)) ||
+                 // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                     // let it happen, don't do anything
+                     return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+      })
       $('#btn-register').on('click', function() {
           loading(true);
           var message = "";
@@ -292,6 +319,11 @@ if (isset($_GET["id"])) {
           var password = $('#password').val();
           var confirmpassword = $('#confirmpassword').val();
 
+          console.log(age);
+
+          if (idcard.length != 13) {
+            message = message.concat("- กรุณากรอกรหัสประชาชนให้ครบ 13 หลัก<br>");
+          }
           if (email == "") {
             message += "- กรุณาระบุ email<br>";
           }
@@ -307,30 +339,30 @@ if (isset($_GET["id"])) {
             return;
           }
 
-          $.ajax({
-            url: "service-register.php",
-            type: "POST",
-            dataType: "JSON",
-            data: {
-              "idcard": idcard,
-              "prefix": prefix,
-              "name": name,
-              "lastname": lastname,
-              "age": age,
-              "sex": sex,
-              "email": email,
-              "password": password,
-            }, success: function(resp) {
-              loading(false);
-              console.log(resp);
-              if (resp.result == true) {
-                  window.location = "index.php?title=" + resp.message + "&message=กรุณายืนยันอีเมลภายใน 7 วัน อีเมล์ยืนยันจะถูกส่งให้ภายใน 5 - 10 นาที";
-              }
-            }, error: function(error) {
-              loading(false);
-              console.log(error);
-            }
-          })
+          // $.ajax({
+          //   url: "service-register.php",
+          //   type: "POST",
+          //   dataType: "JSON",
+          //   data: {
+          //     "idcard": idcard,
+          //     "prefix": prefix,
+          //     "name": name,
+          //     "lastname": lastname,
+          //     "age": age,
+          //     "sex": sex,
+          //     "email": email,
+          //     "password": password,
+          //   }, success: function(resp) {
+          //     loading(false);
+          //     console.log(resp);
+          //     if (resp.result == true) {
+          //         window.location = "index.php?title=" + resp.message + "&message=กรุณายืนยันอีเมลภายใน 7 วัน อีเมล์ยืนยันจะถูกส่งให้ภายใน 5 - 10 นาที";
+          //     }
+          //   }, error: function(error) {
+          //     loading(false);
+          //     console.log(error);
+          //   }
+          // })
 
       })
 
