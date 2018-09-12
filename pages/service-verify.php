@@ -7,8 +7,10 @@ if ($_GET) {
   $sql = "UPDATE member SET status = 1 WHERE email = '$email' and id = $id";
   $conn->query($sql);
   header('Location: index.php?title=ยืนยันอีเมล์&message=ยืนยันอีเมล์เสร็จสิ้น ท่านสมารถเข้าสู่ระบบได้ทันที');
+} else {
+  header('Location: index.php?title=ยืนยันอีเมล์&message=ไม่สามารถยืนยันอีเมล์ได้ กรุณาลองใหม่อีกครั้ง');
 }
-header('Location: index.php?title=ยืนยันอีเมล์&message=ไม่สามารถยืนยันอีเมล์ได้ กรุณาลองใหม่อีกครั้ง');
+
 
 
  ?>

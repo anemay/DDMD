@@ -324,7 +324,7 @@ if (isset($_GET["id"])) {
               loading(false);
               console.log(resp);
               if (resp.result == true) {
-                  window.location = "index.php?title=" + resp.message + "&message=กรุณายืนยันอีเมลภายใน 7 วัน";
+                  window.location = "index.php?title=" + resp.message + "&message=กรุณายืนยันอีเมลภายใน 7 วัน อีเมล์ยืนยันจะถูกส่งให้ภายใน 5 - 10 นาที";
               }
             }, error: function(error) {
               loading(false);
