@@ -24,9 +24,6 @@
                     <li>
                         <a href="score.php"><span class="glyphicon glyphicon-align-left  " aria-hidden="true"></span> คะแนน</a>
                     </li>
-                    <li>
-                        <a href="#"><i class="fa fa-sort-amount-desc  "></i> ประมวลผลคะแนน</a>
-                    </li>
                     </ul>
             </li>
             <li>
@@ -95,10 +92,10 @@
                         <a href="register.php?id=<?= $_SESSION['member_id']; ?>"><i class="fa fa-pencil fa-fw"></i> แก้ไข</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-minus fa-fw"></i> เปลี่ยนรหัสผ่าน</a>
+                        <a href="#"><i class="fa fa-exchange"></i> เปลี่ยนรหัสผ่าน</a>
                     </li>
                     <li>
-                        <a href="show-score.php"><i class="fa fa-minus fa-fw"></i> แสดงข้อมูลคะแนน </a>
+                        <a href="show-score.php"><i class="fa fa-bar-chart-o"></i> แสดงข้อมูลคะแนน </a>
                     </li>
                 </ul>
             </li>
