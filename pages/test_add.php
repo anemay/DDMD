@@ -4,6 +4,7 @@ $topic="";
 $link = "";
 $slink = "";
 $detail = "";
+$preview = "";
 if (isset($_GET["id"])) {
   $id = $_GET["id"];
   $sql = "SELECT * FROM test, video where test.id = $id and test.id = video.test_id";
@@ -15,6 +16,9 @@ if (isset($_GET["id"])) {
       $link = $data["link"];
       $slink = $data["slink"];
     }
+}
+if (isset($_GET["preview"])) {
+  $preview = " disabled";
 }
 ?>
 <!DOCTYPE html>
@@ -84,10 +88,14 @@ if (isset($_GET["id"])) {
                 <div class="col-md-12">
                     <div class="col-md-12">
                       <?php
-                        if (isset($_GET["id"])) {
-                          echo '<h1 class="page-header">แก้ไขแบบทดสอบ</h1>';
+                        if ($preview == "") {
+                          if (isset($_GET["id"])) {
+                            echo '<h1 class="page-header">แก้ไขแบบทดสอบ</h1>';
+                          } else {
+                            echo '<h1 class="page-header">เพิ่มแบบทดสอบ</h1>';
+                          }
                         } else {
-                          echo '<h1 class="page-header">เพิ่มแบบทดสอบ</h1>';
+                          echo '<h1 class="page-header">แบบทดสอบ</h1>';
                         }
                        ?>
                     </div>
@@ -96,36 +104,39 @@ if (isset($_GET["id"])) {
                         <div class="form-group">
                           <label for="" class="col-sm-2 control-label">ชื่อเรื่อง</label>
                           <div class="col-sm-10">
-                            <input type="text" class="form-control" id="idstory" value="<?=$topic;?>" placeholder="ชื่อเรื่อง">
+                            <input type="text" class="form-control" id="idstory" value="<?=$topic;?>" placeholder="ชื่อเรื่อง" <?= $preview; ?>>
                           </div>
                         </div>
                         <div class="form-group">
                           <label for="" class="col-sm-2 control-label">ลิ้งค์(URL)</label>
                           <div class="col-sm-10">
-                            <input type="text" class="form-control" id="link" value="<?=$link;?>" placeholder="ลิ้งค์(URL)" maxlength="50">
+                            <input type="text" class="form-control" id="link" value="<?=$link;?>" placeholder="ลิ้งค์(URL)" maxlength="50" <?= $preview; ?>>
                           </div>
                         </div>
                         <div class="form-group">
                           <label for="" class="col-sm-2 control-label">ตัวอย่าง(URL)</label>
                           <div class="col-sm-10">
-                            <input type="text" class="form-control" id="slink" placeholder="ลิ้งค์ตัวอย่าง(URL)" value="<?=$slink;?>"  maxlength="50">
+                            <input type="text" class="form-control" id="slink" placeholder="ลิ้งค์ตัวอย่าง(URL)" value="<?=$slink;?>" <?= $preview; ?> maxlength="50">
                           </div>
                         </div>
 
                         <div class="form-group">
                           <label for="" class="col-sm-2 control-label">รายละเอียด</label>
                           <div class="col-sm-10">
-                            <textarea  type="text" class="form-control" id="detail"  value="<?=$detail;?>" placeholder="รายละเอียด" rows="6" style="resize: none;"><?= $detail; ?></textarea>
+                            <textarea  type="text" class="form-control" id="detail"  value="<?=$detail;?>" placeholder="รายละเอียด" rows="6" style="resize: none;" <?= $preview; ?>><?= $detail; ?></textarea>
                           </div>
                         </div>
                       </form>
                     </div>
 
                     <div class="col-md-12" align="center">
-                      <?php if (isset($_GET["id"])) {
-                        echo '<button class="btn btn-primary" id="btn-update" type="button" data-toggle="modal" data-target="#modal-confirm">ยืนยันการแก้ไขแบบทดสอบ</button>';
-                      } else {
-                        echo '<button class="btn btn-primary" id="btn-confirm" type="button" data-toggle="modal" data-target="#modal-confirm">ยืนยันการสร้างแบบทดสอบ</button>';
+                      <?php
+                      if ($preview == "") {
+                        if (isset($_GET["id"])) {
+                          echo '<button class="btn btn-primary" id="btn-update" type="button" data-toggle="modal" data-target="#modal-confirm">ยืนยันการแก้ไขแบบทดสอบ</button>';
+                        } else {
+                          echo '<button class="btn btn-primary" id="btn-confirm" type="button" data-toggle="modal" data-target="#modal-confirm">ยืนยันการสร้างแบบทดสอบ</button>';
+                        }
                       }
                       ?>
 
@@ -144,7 +155,7 @@ if (isset($_GET["id"])) {
                           </div>
                       </div>
                     <?php } else { ?>
-                      <h1 class="page-header">แก้ไขคำถามในแบบทดสอบ</h1>
+                      <h1 class="page-header">คำถามในแบบทดสอบ</h1>
                       <div class="col-md-12">
                           <div id="question-content">
                             <?php
@@ -159,7 +170,7 @@ if (isset($_GET["id"])) {
                                   echo '<form class="form-horizontal">';
                                   echo '<div class="form-group">';
                                   echo '<label for="" class="col-sm-2 control-label">ข้อที่ '. $topicNumber .'</label>';
-                                  echo '<div class="col-sm-9"><input type="text" class="form-control question-topic" id="" value="'.$question.'" placeholder="คำถามข้อที่ '. $topicNumber .'"></div>';
+                                  echo '<div class="col-sm-9"><input type="text" class="form-control question-topic" id="" value="'.$question.'" '.$preview.' placeholder="คำถามข้อที่ '. $topicNumber .'"></div>';
                                   echo '<input type="hidden" name="questionId'.$topicNumber.'" value="'.$qid.'">';
                                   echo '</div>';
 
@@ -191,9 +202,11 @@ if (isset($_GET["id"])) {
                                     }
                                     echo '<div class="form-group">';
                                     echo '<label for="" class="col-md-3 control-label">'.$textNumber.'.</label>';
-                                    echo '<div class="col-sm-6"><input type="text" class="form-control answer'.$textEn.'" id="" value="'.$answer.'" placeholder="คำถาม '.$textNumber.'"></div>';
-                                    echo '<div class="col-sm-2"><div class="radio"><label><input type="radio" name="correct'.$topicNumber.'" id="optionsRadios1" value="'.($answerNumber - 1).'" '.$checked.'>ข้อถูก</label></div></div>';
-                                    echo '<input type="hidden" name="correctId'.$topicNumber.'" value="'.$ansId.'">';
+                                    echo '<div class="col-sm-6"><input type="text" class="form-control answer'.$textEn.'" '.$preview.' id="" value="'.$answer.'" placeholder="คำถาม '.$textNumber.'"></div>';
+                                    if ($preview == "") {
+                                      echo '<div class="col-sm-2"><div class="radio"><label><input type="radio" name="correct'.$topicNumber.'" id="optionsRadios1" value="'.($answerNumber - 1).'" '.$checked.'>ข้อถูก</label></div></div>';
+                                      echo '<input type="hidden" name="correctId'.$topicNumber.'" value="'.$ansId.'">';
+                                    };
                                     echo '</div>';
 
                                     $answerNumber++;
@@ -206,10 +219,12 @@ if (isset($_GET["id"])) {
                               }
                              ?>
                           </div>
+                          <?php if ($preview == "") { ?>
                           <div class="col-md-6 center-vertical">
                             <button type="button" id="btn-add-question" class="btn btn-success btn-lg">
                               <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> เพิ่มคำถาม
                             </button>
+                          <?php }; ?>
                           </div>
                       </div>
                     <?php } ?>
