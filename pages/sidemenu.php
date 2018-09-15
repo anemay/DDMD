@@ -12,9 +12,6 @@
                 <a href="#"><i class="fa fa-user fa-fw"></i> การจัดการข้อมูลสมาชิก<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
-                        <a href="register.php"><i class="fa fa-plus fa-fw"></i> เพิ่ม</a>
-                    </li>
-                    <li>
                         <a href="member-edit.php"><i class="fa fa-pencil fa-fw"></i>ข้อมูลสมาชิก</a>
                     </li>
                     </ul>
@@ -95,7 +92,7 @@
                 <a href="#"><i class="fa fa-group   fa-fw"></i> การจัดการข้อมูลผู้ใช้<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
-                        <a href="#"><i class="fa fa-pencil fa-fw"></i> แก้ไข</a>
+                        <a href="register.php?id=<?= $_SESSION['member_id']; ?>"><i class="fa fa-pencil fa-fw"></i> แก้ไข</a>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-minus fa-fw"></i> เปลี่ยนรหัสผ่าน</a>

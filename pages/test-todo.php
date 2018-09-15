@@ -100,7 +100,7 @@ if (isset($_POST["test_id"])) {
                     </div>
                     <div class="col-md-12"><hr/></div>
                     <?php
-                      $sql_select_random_top_5 = "SELECT * FROM question ORDER BY RAND() LIMIT 5";
+                      $sql_select_random_top_5 = "SELECT * FROM question WHERE test_id = $testId ORDER BY RAND() LIMIT 5";
                       $result = $conn->query($sql_select_random_top_5);
                       $count = 1;
                       if ($result->num_rows > 0) {
@@ -205,17 +205,36 @@ if (isset($_POST["test_id"])) {
               test_time: testTime,
               data: arr
             }, success: function(resp) {
+              console.log(resp);
               if (resp.result) {
-                window.location = "test-selection.php?id=<?= $testId; ?>";
+                modalCheck(resp);
               }
             }, error: function(error) {
               console.log(error);
             }
           })
+        })
 
+        $('#btn-checked').on('click', function() {
+          window.location = "test-selection.php?id=<?= $testId; ?>";
         })
 
       })
+
+      function modalCheck(resp) {
+        $('#modal-question').modal();
+        var body = $('#modal-body-question');
+        var answer = resp.check;
+        for(i = 0; i < answer.length; i++) {
+          var qa = answer[i].question;
+          var co = answer[i].correct;
+          if (co == 1) {
+            $('<h3>'+qa+' <i class="fa fa-check" style="color: green"></i></h3>').appendTo(body);
+          } else {
+            $('<h3>'+qa+' <i class="fa fa-times" style="color: red"></i></h3>').appendTo(body);
+          }
+        }
+      }
 
     </script>
 
@@ -240,11 +259,30 @@ if (isset($_POST["test_id"])) {
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
-            <button type="button" class="btn btn-primary" id="btn-submit">ยืนยัน</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" id="btn-submit">ยืนยัน</button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-question" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">สรุปผลคะแนน "<?= $topic; ?>"</h4>
+          </div>
+          <div class="modal-body" id="modal-body-question">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="btn-checked" data-dismiss="modal">ยืนยัน</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 </body>
 
 </html>

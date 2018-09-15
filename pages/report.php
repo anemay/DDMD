@@ -77,7 +77,7 @@ require 'connection.php'; ?>
                           </div>
 
                           <div class="col-sm-5">
-                              <button type="button" id="btn-register" class="btn btn-primary">ค้นหา</button>
+                              <button type="submit" id="btn-search" class="btn btn-primary">ค้นหา</button>
                               <label for="inputPassword3" class="col-sm-3 control-label">ประเภทบุคคล</label>
                               <div class="col-sm-4">
                                 <select id="prefix" class="form-control" >

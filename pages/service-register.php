@@ -1,5 +1,8 @@
 <?php
 require('connection.php');
+use PHPMailer\PHPMailer\PHPMailer;
+require 'vendor/autoload.php';
+
 if ($_POST) {
   $idcard = $_POST["idcard"];
   $name = $_POST["name"];
@@ -12,40 +15,49 @@ if ($_POST) {
 
   // คำสั่งเพิ่มข้อมูล
   $sql = "INSERT INTO member(idcard, prefix, name, lastname, age, sex, email, password)";
-  $sql .= " VALUES('$idcard', $prefix, '$name', '$lastname', $age, $sex, '$email', '$password')";
+  $sql .= " VALUES('$idcard', $prefix, '$name', '$lastname', '$age', $sex, '$email', '$password')";
   $last_id = "";
   if ($conn->query($sql) === TRUE) {
     $last_id = $conn->insert_id;
     $json["message"] = "สมัครสมาชิกเสร็จสมบูรณ์";
     $json["result"] = true;
-    echo json_encode($json);
+
   } else {
     $json["message"] = "ไม่สามารถสมัครสมาชิกได้ กรุณาลองใหม่อีกครั้ง";
     $json["error"] = $conn->error;
     $json["result"] = false;
-    echo json_encode($json);
   }
 
-  $mail_to = $email;
-  $subject = "please confirm your email";
-
-  $message = "
+  $mail = new PHPMailer;
+  $mail->isSMTP();
+  $mail->SMTPDebug = 0;
+  $mail->Host = 'smtp.gmail.com';
+  $mail->Port = 587;
+  $mail->SMTPSecure = 'tls';
+  $mail->SMTPAuth = true;
+  $mail->Username = "gotoknowdrugs@gmail.com";
+  $mail->Password = "anemay1016";
+  $mail->setFrom('gotoknowdrugs@gmail.com', 'GotoKnowDrugs');
+  $mail->addAddress($email, $name . " " . $lastname);
+  $mail->Subject = 'verify email gotoknowdrugs';
+  $mail->msgHTML("
   <html>
     <head>
-      <title>DDMD</title>
+      <title>gotoknowdrugs</title>
     </head>
     <body>
       <h3>Dear K. $name $lastname</h3>
-      <h3>this email for verify your email for gotoknowdrugs, <a href='http://www.gotoknowdrugs.shareforproject.com/pages/service-verify.php?email=$email&id=$last_id' target='_blank'>click for verify</a></h3>
+      <h3>this email is verify your personal for gotoknowdrugs, <a href='http://www.gotoknowdrugs.shareforproject.com/pages/service-verify.php?email=$email&id=$last_id' target='_blank'>click for verify</a></h3>
     </body>
   </html>
-";
-  $headers = "MIME-Version: 1.0" . "\r\n";
-  $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+");
 
-  // More headers
-  $headers .= 'From: <admin@ddmd.com>';
+  if (!$mail->send()) {
+    $json["verify"] = "ระบบไม่สามารถส่งการยืนยันอีเมล์ได้";
+  } else {
+    $json["verify"] = "ระบบส่งการยืนยันอีเมล์สำเร็จ";
+  }
 
-  mail($mail_to,$subject,$message,$headers);
+  echo json_encode($json);
 
 }

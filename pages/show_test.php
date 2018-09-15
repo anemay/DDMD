@@ -11,7 +11,7 @@ require 'connection.php'; ?>
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+    <title>Project DDMD</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -67,16 +67,16 @@ require 'connection.php'; ?>
                 <div class="col-lg-12">
                     <h1 class="page-header">แบบทดสอบ</h1>
                     <div class="col-md-10 col-md-offset-1">
-                      <form class="form-horizontal">
+                      <form class="form-horizontal" action="show_test.php" method="get">
 
                         <div class="form-group">
                           <label for="" class="col-sm-2 control-label">ค้นหา</label>
                           <div class="col-sm-5">
-                              <input type="text" class="form-control" id="search" name="search" placeholder="ชื่อเรื่อง">
+                              <input type="text" class="form-control" id="title" name="title" placeholder="ชื่อเรื่อง">
                           </div>
 
                           <div class="col-sm-5">
-                              <button type="button" id="btn-register" class="btn btn-primary">ค้นหา</button>
+                              <button type="submit" id="btn-register" class="btn btn-primary">ค้นหา</button>
                           </div>
                         </div>
 
@@ -94,13 +94,13 @@ require 'connection.php'; ?>
                               <tbody>
                                 <?php
                                   $where = "";
-                                  if (isset($_GET["search"])) {
-                                    $search = $_GET["search"];
-                                    $where .= "WHERE topic like '%$search%'";
+                                  if (isset($_GET["title"])) {
+                                    $title = $_GET["title"];
+                                    $where = " and topic like '%$title%'";
                                   }
-                                  $sql = "SELECT * FROM test,video where test.id=video.test_id".$where;
+                                  $sql = "SELECT *, test.id as tid FROM test , video where test.id = video.test_id " . $where;
                                   $result = $conn->query($sql);
-                                  if ($result->num_rows > 0) {
+                                  if ($result && $result->num_rows > 0) {
                                     $count = 1;
                                     while ($row = $result->fetch_assoc()) {
                                       echo '<tr>';
@@ -109,8 +109,8 @@ require 'connection.php'; ?>
                                       echo '<td>'.$row["link"].'</td>';
                                       echo '<td>';
                                       ?>
-                                        <a href="test_add.php?id=<?php echo $row['test_id']; ?>"><button type="button" class="btn btn-warning"><i class="fa fa-pencil"></i></button></a>
-                                        <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+                                        <a class="btn btn-warning" href="test_add.php?id=<?php echo $row['tid']; ?>"><i class="fa fa-pencil"></i></a>
+                                        <a class="btn btn-danger" onclick="deleteTest('<?php echo $row['topic']; ?>', <?php echo $row['tid']; ?>)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                                       <?php
                                       echo '</td>';
                                       echo '</tr>';
@@ -250,6 +250,31 @@ require 'connection.php'; ?>
             $('#loading-dialog').modal('hide');
         }
       }
+      function deleteTest(test, id) {
+        $('#modal-delete').modal();
+        var title = $('#message-delete-title');
+        title.text(test);
+        $('#btn-modal-delete').on('click', function() {
+          $.ajax({
+            url: "service-test-delete.php",
+            type: "POST",
+            dataType: 'json',
+            data: {
+              "id": id
+            }, success: function(resp) {
+              console.log(resp);
+              $('#modal-delete').modal('hide');
+              if (resp.result) {
+                window.location = "show_test.php";
+              }
+            }, error: function(error, xhr) {
+              console.log(error);
+              console.log(xhr);
+              $('#modal-delete').modal('hide');
+            }
+          })
+        })
+      }
 
       $(document).ready(function(){
         var title = getUrlParameter('title');
@@ -288,6 +313,25 @@ require 'connection.php'; ?>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="message-delete-title"></h4>
+          </div>
+          <div class="modal-body" id="message-delete-content">
+            ยืนยันการลบแบบทดสอบ ถ้าหากลบแบบทดสอบ จะไม่สามารถกู้คืนกลับมาได้ หากต้องการดำเนินการต่อ กรุณายืนยัน
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+            <button type="button" class="btn btn-danger" id="btn-modal-delete" data-dismiss="modal">ยืนยันการลบ</button>
           </div>
         </div>
       </div>

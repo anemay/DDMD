@@ -110,7 +110,7 @@ if (isset($_GET["id"])) {
                           <div class="col-sm-9">
 
                             <!-- <select id="prefix" class="form-control" > -->
-                            <select class="form-control" name="prefix">
+                            <select class="form-control" name="prefix" id="prefix">
                               <?php
                                 $sql = "SELECT * FROM prefix";
                                 $result = $conn->query($sql);
@@ -144,7 +144,7 @@ if (isset($_GET["id"])) {
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">วัน/เดือน/ปีเกิด</label>
                         <div class="col-sm-9">
-                            <input class="form-control" type="date" name="bday">
+                            <input class="form-control" type="date" name="age" id="age">
                             <!-- <?php
                               $sql = "SELECT * FROM age";
                               $result = $conn->query($sql);
@@ -165,7 +165,7 @@ if (isset($_GET["id"])) {
                           <label for="inputPassword3" class="col-sm-3 control-label">ประเภทบุคคล</label>
                           <div class="col-sm-9">
 
-                            <select class="form-control" name="type">
+                            <select class="form-control" name="type" id="type">
                               <?php
                                 $sql = "SELECT * FROM type";
                                 $result = $conn->query($sql);
@@ -186,11 +186,17 @@ if (isset($_GET["id"])) {
                             <?php
                               $sql = "SELECT * FROM sex";
                               $result = $conn->query($sql);
+                              $sexCount = 1;
                               if ($result->num_rows > 0){
                                 while ($row = $result->fetch_assoc()) {
                                   echo '<label class="radio-inline">';
-                                  echo '<input type="radio" name="radio-sex" value="'.$row["id"].'">'.$row["sex"].'</input>';
+                                  if ($sexCount == 1) {
+                                    echo '<input type="radio" name="radio-sex" value="'.$row["id"].'" checked="checked">'.$row["sex"].'</input>';
+                                  } else {
+                                    echo '<input type="radio" name="radio-sex" value="'.$row["id"].'">'.$row["sex"].'</input>';
+                                  }
                                   echo '</label>';
+                                  $sexCount++;
                                 }
                               }
                             ?>
@@ -202,7 +208,13 @@ if (isset($_GET["id"])) {
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">อีเมล</label>
                           <div class="col-sm-9">
-                            <input type="email" class="form-control" id="email" value="<?=$email;?>" placeholder="อีเมล" maxlength="50">
+                            <?php
+                              if (isset($_GET["id"])) {
+                                echo '<input type="email" class="form-control" id="email" value="'.$email.'" placeholder="อีเมล" maxlength="50" disabled>';
+                              } else {
+                                echo '<input type="email" class="form-control" id="email" value="'.$email.'" placeholder="อีเมล" maxlength="50">';            
+                              }
+                             ?>
                           </div>
                         </div>
 
@@ -276,6 +288,27 @@ if (isset($_GET["id"])) {
     <script src="../dist/js/sb-admin-2.js"></script>
 
     <script>
+      $(document).ready(function() {
+        $("#idcard").keydown(function (e) {
+            // Allow: backspace, delete, tab, escape, enter and .
+            if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                 // Allow: Ctrl/cmd+A
+                (e.keyCode == 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                 // Allow: Ctrl/cmd+C
+                (e.keyCode == 67 && (e.ctrlKey === true || e.metaKey === true)) ||
+                 // Allow: Ctrl/cmd+X
+                (e.keyCode == 88 && (e.ctrlKey === true || e.metaKey === true)) ||
+                 // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                     // let it happen, don't do anything
+                     return;
+            }
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                e.preventDefault();
+            }
+        });
+      })
       $('#btn-register').on('click', function() {
           loading(true);
           var message = "";
@@ -285,13 +318,18 @@ if (isset($_GET["id"])) {
           var prefix = $("#prefix").val();
           var name = $('#name').val();
           var lastname = $('#lastname').val();
-          var age = $('input[name=radio-age]:checked').val();
+          var age = $('#age').val();
           var sex = $('input[name=radio-sex]:checked').val();
           var type = $("#type").val();
           var email = $('#email').val();
           var password = $('#password').val();
           var confirmpassword = $('#confirmpassword').val();
 
+          console.log(age);
+
+          if (idcard.length != 13) {
+            message = message.concat("- กรุณากรอกรหัสประชาชนให้ครบ 13 หลัก<br>");
+          }
           if (email == "") {
             message += "- กรุณาระบุ email<br>";
           }
@@ -307,6 +345,32 @@ if (isset($_GET["id"])) {
             return;
           }
 
+          <?php
+            if (isset($_GET["id"])) {
+              ?>
+              $.ajax({
+                url: "service-member-update.php",
+                type: "POST",
+                dataType: "JSON",
+                data: {
+                  "id": <?php echo $id; ?>,
+                  "name": name,
+                  "lastname": lastname,
+                }, success: function(resp) {
+                  loading(false);
+                  console.log(resp);
+                  if (resp.result == true) {
+                    alert("done");
+                      //window.location = "index.php?title=" + resp.message + "&message=กรุณายืนยันอีเมลภายใน 7 วัน อีเมล์ยืนยันจะถูกส่งให้ภายใน 5 - 10 นาที";
+                  }
+                }, error: function(error) {
+                  loading(false);
+                  console.log(error);
+                }
+              })
+              <?php
+            } else {
+          ?>
           $.ajax({
             url: "service-register.php",
             type: "POST",
@@ -324,14 +388,14 @@ if (isset($_GET["id"])) {
               loading(false);
               console.log(resp);
               if (resp.result == true) {
-                  window.location = "index.php?title=" + resp.message + "&message=กรุณายืนยันอีเมลภายใน 7 วัน";
+                  window.location = "index.php?title=" + resp.message + "&message=กรุณายืนยันอีเมลภายใน 7 วัน อีเมล์ยืนยันจะถูกส่งให้ภายใน 5 - 10 นาที";
               }
             }, error: function(error) {
               loading(false);
               console.log(error);
             }
           })
-
+          <?php }; ?>
       })
 
       function displayError(show, message) {
