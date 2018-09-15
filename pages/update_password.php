@@ -1,15 +1,5 @@
 <?php session_start();
 require 'connection.php';
-$idcard = "";
-$name = "";
-$lastname = "";
-$age= "";
-$sex = "";
-$status = "";
-$email = "";
-$password = "";
-$type = "";
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -82,7 +72,7 @@ $type = "";
                     <div class="col-md-5 col-md-offset-2">
                       <form class="form-horizontal">
 
-                        <?php if (!isset($_GET["id"])) { ?>
+                        <?php if (isset($_GET["id"])) { ?>
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">รหัสผ่านใหม่</label>
                           <div class="col-sm-9">
@@ -98,22 +88,10 @@ $type = "";
                           </div>
                         </div>
                       <?php } ;?>
-
-
-
-
-
-                        <div class="form-group">
-                          <label for="" class="col-sm-3 control-label"></label>
-                          <div class="col-sm-9">
-                            <div class="alert alert-danger" style="display: none" id="alert" role="alert"></div>
-                          </div>
-                        </div>
-
                         <div class="form-group">
                           <div class="col-sm-12" align="center">
                             <button type="button" class="btn btn-default">ยกเลิก</button>
-                            <button type="button" id="btn-register" class="btn btn-primary">ยืนยัน</button>
+                            <button type="button" id="btn-reset" class="btn btn-primary">ยืนยัน</button>
                           </div>
                         </div>
                       </form>
@@ -157,81 +135,39 @@ $type = "";
     <script src="../dist/js/sb-admin-2.js"></script>
 
     <script>
-      $('#btn-register').on('click', function() {
-          loading(true);
+      $('#btn-reset').on('click', function() {
           var message = "";
-          displayError(false, "");
-
-          var idcard = $('#idcard').val();
-          var prefix = $("#prefix").val();
-          var name = $('#name').val();
-          var lastname = $('#lastname').val();
-          var age = $('input[name=radio-age]:checked').val();
-          var sex = $('input[name=radio-sex]:checked').val();
-          var type = $("#type").val();
-          var email = $('#email').val();
           var password = $('#password').val();
           var confirmpassword = $('#confirmpassword').val();
-
-          if (email == "") {
-            message += "- กรุณาระบุ email<br>";
-          }
           if (password != confirmpassword) {
-            message = message.concat("- รหัสผ่านไม่ตรงกัน กรุณากรอกอีกครั้ง<br>");
+            message = message.concat("- รหัสผ่านไม่ตรงกัน กรุณากรอกอีกครั้ง");
           } else if (password == "" || confirmpassword == "") {
             message = message.concat("- กรุณาใส่รหัสผ่าน");
           }
 
           if (message != "") {
-            loading(false);
-            displayError(true, message);
+            alert(message);
             return;
           }
 
           $.ajax({
-            url: "service-register.php",
+            url: "service-update-password.php",
             type: "POST",
             dataType: "JSON",
             data: {
-              "idcard": idcard,
-              "prefix": prefix,
-              "name": name,
-              "lastname": lastname,
-              "age": age,
-              "sex": sex,
-              "email": email,
+              "id": <?= $_GET["id"]; ?>,
               "password": password,
             }, success: function(resp) {
-              loading(false);
               console.log(resp);
               if (resp.result == true) {
-                  window.location = "index.php?title=" + resp.message + "&message=กรุณายืนยันอีเมลภายใน 7 วัน";
+                  window.location = "index.php?title=" + resp.message + "&message=เปลี่ยนรหัสผ่านเสร็จสิ้น";
               }
             }, error: function(error) {
-              loading(false);
               console.log(error);
             }
           })
 
       })
-
-      function displayError(show, message) {
-          //show ? $('#alert').show() : $('#alert').hide();
-          if (show) {
-            $('#alert').show();
-          } else {
-            $('#alert').hide();
-          }
-          $('#alert').html(message);
-      }
-
-      function loading(show) {
-        if (show) {
-            $('#loading-dialog').modal('show');
-        } else {
-            $('#loading-dialog').modal('hide');
-        }
-      }
     </script>
 
 </body>

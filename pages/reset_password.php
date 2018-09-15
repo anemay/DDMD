@@ -22,7 +22,7 @@ $type = "";
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+    <title>Proejct DDMD</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -86,21 +86,9 @@ $type = "";
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">อีเมล</label>
                           <div class="col-sm-9">
-                            <input type="email" class="form-control" id="email" value="<?=$email;?>" placeholder="อีเมล" maxlength="50">
+                            <input type="email" class="form-control" id="email" value="" placeholder="อีเมล" maxlength="50">
                           </div>
                         </div>
-
-                        <?php if (!isset($_GET["id"])) { ?>
-
-
-                      <?php } ;?>
-                        <div class="form-group">
-                          <label for="" class="col-sm-3 control-label"></label>
-                          <div class="col-sm-9">
-                            <div class="alert alert-danger" style="display: none" id="alert" role="alert"></div>
-                          </div>
-                        </div>
-
                         <div class="form-group">
                           <div class="col-sm-12" align="center">
 
@@ -149,80 +137,23 @@ $type = "";
 
     <script>
       $('#btn-register').on('click', function() {
-          loading(true);
-          var message = "";
-          displayError(false, "");
-
-          var idcard = $('#idcard').val();
-          var prefix = $("#prefix").val();
-          var name = $('#name').val();
-          var lastname = $('#lastname').val();
-          var age = $('input[name=radio-age]:checked').val();
-          var sex = $('input[name=radio-sex]:checked').val();
-          var type = $("#type").val();
           var email = $('#email').val();
-          var password = $('#password').val();
-          var confirmpassword = $('#confirmpassword').val();
-
-          if (email == "") {
-            message += "- กรุณาระบุ email<br>";
-          }
-          if (password != confirmpassword) {
-            message = message.concat("- รหัสผ่านไม่ตรงกัน กรุณากรอกอีกครั้ง<br>");
-          } else if (password == "" || confirmpassword == "") {
-            message = message.concat("- กรุณาใส่รหัสผ่าน");
-          }
-
-          if (message != "") {
-            loading(false);
-            displayError(true, message);
-            return;
-          }
-
           $.ajax({
-            url: "service-register.php",
+            url: "service-email-reset-password.php",
             type: "POST",
             dataType: "JSON",
             data: {
-              "idcard": idcard,
-              "prefix": prefix,
-              "name": name,
-              "lastname": lastname,
-              "age": age,
-              "sex": sex,
-              "email": email,
-              "password": password,
+              "email": email
             }, success: function(resp) {
-              loading(false);
               console.log(resp);
               if (resp.result == true) {
-                  window.location = "index.php?title=" + resp.message + "&message=กรุณายืนยันอีเมลภายใน 7 วัน";
+                  window.location = "index.php?title=" + resp.message + "&message=" + resp.message;
               }
             }, error: function(error) {
-              loading(false);
               console.log(error);
             }
           })
-
       })
-
-      function displayError(show, message) {
-          //show ? $('#alert').show() : $('#alert').hide();
-          if (show) {
-            $('#alert').show();
-          } else {
-            $('#alert').hide();
-          }
-          $('#alert').html(message);
-      }
-
-      function loading(show) {
-        if (show) {
-            $('#loading-dialog').modal('show');
-        } else {
-            $('#loading-dialog').modal('hide');
-        }
-      }
     </script>
 
 </body>
