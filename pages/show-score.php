@@ -1,5 +1,13 @@
 <?php session_start();
-require 'connection.php'; ?>
+require 'connection.php';
+
+if ($_GET) {
+  $id = $_GET["id"];
+} else {
+  $id = $_SESSION["member_id"];
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +19,7 @@ require 'connection.php'; ?>
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Project DDMD</title>
+    <title>SB Admin 2 - Bootstrap Admin Theme</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -63,32 +71,113 @@ require 'connection.php'; ?>
         </nav>
 
         <div id="page-wrapper">
-          <div class="col-md-12">
-              <h1 class="page-header">รายการทดสอบ</h1>
-              <?php
-                  $sql_select_test = "SELECT * FROM test";
-                  $result = $conn->query($sql_select_test);
-                  if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                      $id = $row["id"];
-                      $detail = mb_strimwidth($row["detail"], 0, 300, "...");
-                      echo '<div class="col-md-4">';
-                      echo '<div class="col-md-12 well">';
-                      echo '<h4>'.$row["topic"].'</h4>';
-                      echo '<hr>';
-                      echo '<h5>'.$detail.'</h5><br/>';
-                      echo '<div align="right">';
-                      echo '<a href="test-selection.php?id='.$id.'" type="button" class="btn btn-default">
-  <span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span> ทำแบบทดสอบ
-</a>';
-                      echo '</div>';
-                      echo '</div>';
-                      echo '</div>';
-                    }
-                  }
-               ?>
-          </div>
+            <div class="row">
+                <div class="col-lg-12">
+                  <?php if(!isset($_GET["id"])) {
+                    echo '<h1 class="page-header">แสดงข้อมูลคะแนน</h1>';
+                  } else {
+                      echo '<h1 class="page-header">แก้ไขสมาชิก</h1>';
+                  } ?>
 
+                  <div class="card bg-primary">
+                    <div class="card-body profile-user-box">
+
+                      <div class="row">
+                        <div class="col-sm-12">
+                                <!-- Profile -->
+                          <div class="card bg-primary">
+                            <div class="card-body profile-user-box">
+
+                              <div class="row">
+                                <div class="col-sm-8">
+                                  <div class="media">
+                                    <span class="col-xs-6 col-md-3">
+                                      <img src="img/avatar-girl.png" style="height: 100px; " alt="" class="center">
+                                    </span>
+
+                                  <div class="media-body">
+                                    <?php
+
+                                      $sql = "SELECT * FROM score, member Where score.member_id = member.id and member.id=$id" ;
+                                      $result = $conn->query($sql);
+                                      if ($result->num_rows > 0) { //
+                                        $member = $result->fetch_assoc();
+                                      }
+                                     ?>
+                                      <h4 class="mt-1 mb-1 text-white"><?= $member["name"]; ?></h4>
+                                        <p class="font-13 text-white-50"> EMAIL</p>
+
+                                      <ul class="mb-0 list-inline text-light">
+                                        <li class="list-inline-item mr-3">
+                                      <h5 class="mb-1">xxxx</h5>
+                                          <p class="mb-0 font-13 text-white-50">คะแนนก่อนทำแบบทดสอบ</p>
+                                        </li>
+                                        <li class="list-inline-item">
+                                        <h5 class="mb-1">xxxxx</h5>
+                                          <p class="mb-0 font-13 text-white-50">คะแนนหลังทำแบบทดสอบ</p>
+                                        </li>
+                                        </ul>
+
+                                    </div> <!-- end media-body-->
+
+
+                                  </div> <!-- end col-->
+
+
+                                </div> <!-- end row -->
+
+                              </div> <!-- end card-body/ profile-user-box-->
+                             </div><!--end profile/ card -->
+                            </div> <!-- end col-->
+                        </div>
+                        <!-- end row -->
+
+
+                  </div>
+
+
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <br>
+            <br>
+
+            <div class="col-lg-12 table-responsive">
+                <table class="table table-hover table-bordered">
+                  <thead>
+                      <tr>
+                        <th>ลำดับ</th>
+                        <th>คะแนนหลังทำแบบทดสอบ</th>
+                        <th>วันที่ทำแบบทดสอบ</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                      <?php
+                        $where = "";
+                        if (isset($_GET["search"])) {
+                          $search = $_GET["search"];
+                          $where .= " WHERE name like '%$search%' or lastname like '%$search%'";
+                        }
+                        $sql = "SELECT * FROM score" . $where;
+                        $result = $conn->query($sql);
+                        if ($result->num_rows > 0) {
+                          $count = 1;
+                          while ($row = $result->fetch_assoc()) {
+                            echo '<tr>';
+                            echo '<td>'.$count.'</td>';
+                            echo '<td>'.$row["score_type"].'</td>';
+                            echo '<td>'.$row["date"].'</td>';
+                            $count++;
+                          }
+                        }
+                       ?>
+
+                    </tbody>
+                    </table>
+
+                </div>
         </div>
         <!-- /#page-wrapper -->
     </div>

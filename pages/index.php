@@ -84,7 +84,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Video ตัวอย่าง</h1>
-                    <iframe width="100%" height="600" src="https://www.youtube.com/embed/mgXnWynhNE8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <iframe width="1200" height="600" src="https://www.youtube.com/embed/zWZzL-jNf30" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
               </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -135,7 +135,7 @@
                 <div class="alert alert-danger" style="display:none" role="alert" id="message-alert-login"></div>
               </div>
               <div align="center">
-                <p><a href="register.php" target="_self" style="text-decoration: underline">สมัครสมาชิก</a> | <a href="#" style="text-decoration: underline">ลืมรหัสผ่าน</a></p>
+                <p><a href="register.php" target="_self" style="text-decoration: underline">สมัครสมาชิก</a> | <a href="reset_password.php" style="text-decoration: underline">ลืมรหัสผ่าน</a></p>
               </div>
             </form>
           </div>

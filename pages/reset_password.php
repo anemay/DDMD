@@ -1,5 +1,16 @@
 <?php session_start();
-require 'connection.php'; ?>
+require 'connection.php';
+$idcard = "";
+$name = "";
+$lastname = "";
+$age= "";
+$sex = "";
+$status = "";
+$email = "";
+$password = "";
+$type = "";
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +22,7 @@ require 'connection.php'; ?>
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Project DDMD</title>
+    <title>SB Admin 2 - Bootstrap Admin Theme</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -63,31 +74,45 @@ require 'connection.php'; ?>
         </nav>
 
         <div id="page-wrapper">
-          <div class="col-md-12">
-              <h1 class="page-header">รายการทดสอบ</h1>
-              <?php
-                  $sql_select_test = "SELECT * FROM test";
-                  $result = $conn->query($sql_select_test);
-                  if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                      $id = $row["id"];
-                      $detail = mb_strimwidth($row["detail"], 0, 300, "...");
-                      echo '<div class="col-md-4">';
-                      echo '<div class="col-md-12 well">';
-                      echo '<h4>'.$row["topic"].'</h4>';
-                      echo '<hr>';
-                      echo '<h5>'.$detail.'</h5><br/>';
-                      echo '<div align="right">';
-                      echo '<a href="test-selection.php?id='.$id.'" type="button" class="btn btn-default">
-  <span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span> ทำแบบทดสอบ
-</a>';
-                      echo '</div>';
-                      echo '</div>';
-                      echo '</div>';
-                    }
-                  }
-               ?>
-          </div>
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <h5 class="page-header">กรุณาใส่ข้อมูลเพื่อยืนยันตัวตนก่อนเปลี่ยนรหัสผ่านของคุณ</h5>
+
+                    <div class="col-md-5 col-md-offset-2">
+                      <form class="form-horizontal">
+
+                        <!-- EMAIL -->
+                        <div class="form-group">
+                          <label for="" class="col-sm-3 control-label">อีเมล</label>
+                          <div class="col-sm-9">
+                            <input type="email" class="form-control" id="email" value="<?=$email;?>" placeholder="อีเมล" maxlength="50">
+                          </div>
+                        </div>
+
+                        <?php if (!isset($_GET["id"])) { ?>
+
+
+                      <?php } ;?>
+                        <div class="form-group">
+                          <label for="" class="col-sm-3 control-label"></label>
+                          <div class="col-sm-9">
+                            <div class="alert alert-danger" style="display: none" id="alert" role="alert"></div>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-sm-12" align="center">
+
+                            <button type="button" id="btn-register" class="btn btn-primary">ขอรหัสผ่านใหม่</button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
 
         </div>
         <!-- /#page-wrapper -->

@@ -142,7 +142,7 @@ if (isset($_GET["id"])) {
 
                         <!-- AGE -->
                         <div class="form-group">
-                          <label for="" class="col-sm-3 control-label">อายุ</label>
+                          <label for="" class="col-sm-3 control-label">วัน/เดือน/ปีเกิด</label>
                         <div class="col-sm-9">
                             <input class="form-control" type="date" name="bday">
                             <!-- <?php

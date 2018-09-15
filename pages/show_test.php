@@ -72,7 +72,7 @@ require 'connection.php'; ?>
                         <div class="form-group">
                           <label for="" class="col-sm-2 control-label">ค้นหา</label>
                           <div class="col-sm-5">
-                              <input type="text" class="form-control" id="idcard" placeholder="ชื่อเรื่อง" maxlength="13">
+                              <input type="text" class="form-control" id="search" name="search" placeholder="ชื่อเรื่อง">
                           </div>
 
                           <div class="col-sm-5">
@@ -93,7 +93,12 @@ require 'connection.php'; ?>
 
                               <tbody>
                                 <?php
-                                  $sql = "SELECT * FROM test,video where test.id=video.test_id";
+                                  $where = "";
+                                  if (isset($_GET["search"])) {
+                                    $search = $_GET["search"];
+                                    $where .= "WHERE topic like '%$search%'";
+                                  }
+                                  $sql = "SELECT * FROM test,video where test.id=video.test_id".$where;
                                   $result = $conn->query($sql);
                                   if ($result->num_rows > 0) {
                                     $count = 1;
@@ -104,7 +109,7 @@ require 'connection.php'; ?>
                                       echo '<td>'.$row["link"].'</td>';
                                       echo '<td>';
                                       ?>
-                                        <button type="button" class="btn btn-warning"><a href="test_add.php?id=<?php echo $row['id']; ?>"><i class="fa fa-pencil"></i></button>
+                                        <a href="test_add.php?id=<?php echo $row['test_id']; ?>"><button type="button" class="btn btn-warning"><i class="fa fa-pencil"></i></button></a>
                                         <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
                                       <?php
                                       echo '</td>';
@@ -112,6 +117,8 @@ require 'connection.php'; ?>
                                       $count++;
                                     }
                                   }
+
+
                                  ?>
 
                               </tbody>

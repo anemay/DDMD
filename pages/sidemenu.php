@@ -62,7 +62,7 @@
                     </li>
                 </ul>
             </li>
-            <li>
+              <!-- /<li>
                 <a href="#"><i class="fa fa-group   fa-fw"></i> การจัดการข้อมูลผู้ใช้<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li>
@@ -75,7 +75,7 @@
                         <a href="#"><i class="fa fa-minus fa-fw"></i> ลบ</a>
                     </li>
                 </ul>
-            </li>
+            </li>   /-->
 
             <li>
                 <a href="report.php"><i class="fa fa-print  fa-fw"></i> รายงานข้อมูล </span></a>
@@ -99,6 +99,9 @@
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-minus fa-fw"></i> เปลี่ยนรหัสผ่าน</a>
+                    </li>
+                    <li>
+                        <a href="show-score.php"><i class="fa fa-minus fa-fw"></i> แสดงข้อมูลคะแนน </a>
                     </li>
                 </ul>
             </li>

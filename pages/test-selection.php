@@ -80,7 +80,7 @@ if (isset($_GET["id"])) {
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header"><?= $topic; ?></h1>
+                    <h1 class="page-header"><?php $topic; ?></h1>
                     <?php
                       $memberId = $_SESSION["member_id"];
                       $sql_select_score_pre = "SELECT * FROM score WHERE member_id = $memberId and test_id = $testId and score_type = 1";
@@ -127,7 +127,7 @@ if (isset($_GET["id"])) {
                      ?>
                     <h4 class="page-header">รายละเอียด</h4>
                     <div class="col-md-12">
-                      <?= $detail; ?>
+                      <?php $detail; ?>
                     </div>
                 </div>
                 <!-- /.col-lg-12 -->

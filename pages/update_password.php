@@ -1,5 +1,16 @@
 <?php session_start();
-require 'connection.php'; ?>
+require 'connection.php';
+$idcard = "";
+$name = "";
+$lastname = "";
+$age= "";
+$sex = "";
+$status = "";
+$email = "";
+$password = "";
+$type = "";
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -63,31 +74,54 @@ require 'connection.php'; ?>
         </nav>
 
         <div id="page-wrapper">
-          <div class="col-md-12">
-              <h1 class="page-header">รายการทดสอบ</h1>
-              <?php
-                  $sql_select_test = "SELECT * FROM test";
-                  $result = $conn->query($sql_select_test);
-                  if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                      $id = $row["id"];
-                      $detail = mb_strimwidth($row["detail"], 0, 300, "...");
-                      echo '<div class="col-md-4">';
-                      echo '<div class="col-md-12 well">';
-                      echo '<h4>'.$row["topic"].'</h4>';
-                      echo '<hr>';
-                      echo '<h5>'.$detail.'</h5><br/>';
-                      echo '<div align="right">';
-                      echo '<a href="test-selection.php?id='.$id.'" type="button" class="btn btn-default">
-  <span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span> ทำแบบทดสอบ
-</a>';
-                      echo '</div>';
-                      echo '</div>';
-                      echo '</div>';
-                    }
-                  }
-               ?>
-          </div>
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <h2 class="page-header">เปลี่ยนรหัสผ่านใหม่</h2>
+
+                    <div class="col-md-5 col-md-offset-2">
+                      <form class="form-horizontal">
+
+                        <?php if (!isset($_GET["id"])) { ?>
+                        <div class="form-group">
+                          <label for="" class="col-sm-3 control-label">รหัสผ่านใหม่</label>
+                          <div class="col-sm-9">
+
+                        <input type="password" class="form-control" id="password" value="<?=$password;?>"placeholder="รหัสผ่าน" >
+
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="" class="col-sm-3 control-label">ยืนยันรหัสผ่าน</label>
+                          <div class="col-sm-9">
+                            <input type="password" class="form-control" id="confirmpassword" placeholder="ยืนยันรหัสผ่าน" >
+                          </div>
+                        </div>
+                      <?php } ;?>
+
+
+
+
+
+                        <div class="form-group">
+                          <label for="" class="col-sm-3 control-label"></label>
+                          <div class="col-sm-9">
+                            <div class="alert alert-danger" style="display: none" id="alert" role="alert"></div>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-sm-12" align="center">
+                            <button type="button" class="btn btn-default">ยกเลิก</button>
+                            <button type="button" id="btn-register" class="btn btn-primary">ยืนยัน</button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
 
         </div>
         <!-- /#page-wrapper -->

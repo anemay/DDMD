@@ -11,7 +11,7 @@ require 'connection.php'; ?>
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>RMUTK</title>
+    <title>PROJECT DDMD</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">

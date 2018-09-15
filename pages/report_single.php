@@ -36,7 +36,7 @@ if (isset($_GET["id"])) {
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+    <title>Project DDMD</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -71,7 +71,7 @@ if (isset($_GET["id"])) {
             <div class="row">
                 <div class="col-lg-12">
                   <h2 class="page-header col-md-offset-4">รายงานข้อมูลเรื่องการใช้ยาผิดคุณลักษณะวิธี</h2>';
-                
+
 
                   <div class="col-md-5 col-md-offset-3">
 

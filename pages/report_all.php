@@ -36,7 +36,7 @@ if (isset($_GET["id"])) {
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>DDMD</title>
+    <title>Project DDMD</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
