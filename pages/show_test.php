@@ -1,5 +1,6 @@
 <?php session_start();
-require 'connection.php'; ?>
+require 'connection.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -109,6 +110,7 @@ require 'connection.php'; ?>
                                       echo '<td>'.$row["link"].'</td>';
                                       echo '<td>';
                                       ?>
+                                        <a class="btn btn-primary" href="test_add.php?preview=1&id=<?php echo $row['tid']; ?>"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
                                         <a class="btn btn-warning" href="test_add.php?id=<?php echo $row['tid']; ?>"><i class="fa fa-pencil"></i></a>
                                         <a class="btn btn-danger" onclick="deleteTest('<?php echo $row['topic']; ?>', <?php echo $row['tid']; ?>)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                                       <?php
