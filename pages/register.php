@@ -208,7 +208,13 @@ if (isset($_GET["id"])) {
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">อีเมล</label>
                           <div class="col-sm-9">
-                            <input type="email" class="form-control" id="email" value="<?=$email;?>" placeholder="อีเมล" maxlength="50">
+                            <?php
+                              if (isset($_GET["id"])) {
+                                echo '<input type="email" class="form-control" id="email" value="'.$email.'" placeholder="อีเมล" maxlength="50" disabled>';
+                              } else {
+                                echo '<input type="email" class="form-control" id="email" value="'.$email.'" placeholder="อีเมล" maxlength="50">';            
+                              }
+                             ?>
                           </div>
                         </div>
 
@@ -339,31 +345,57 @@ if (isset($_GET["id"])) {
             return;
           }
 
-          // $.ajax({
-          //   url: "service-register.php",
-          //   type: "POST",
-          //   dataType: "JSON",
-          //   data: {
-          //     "idcard": idcard,
-          //     "prefix": prefix,
-          //     "name": name,
-          //     "lastname": lastname,
-          //     "age": age,
-          //     "sex": sex,
-          //     "email": email,
-          //     "password": password,
-          //   }, success: function(resp) {
-          //     loading(false);
-          //     console.log(resp);
-          //     if (resp.result == true) {
-          //         window.location = "index.php?title=" + resp.message + "&message=กรุณายืนยันอีเมลภายใน 7 วัน อีเมล์ยืนยันจะถูกส่งให้ภายใน 5 - 10 นาที";
-          //     }
-          //   }, error: function(error) {
-          //     loading(false);
-          //     console.log(error);
-          //   }
-          // })
-
+          <?php
+            if (isset($_GET["id"])) {
+              ?>
+              $.ajax({
+                url: "service-member-update.php",
+                type: "POST",
+                dataType: "JSON",
+                data: {
+                  "id": <?php echo $id; ?>,
+                  "name": name,
+                  "lastname": lastname,
+                }, success: function(resp) {
+                  loading(false);
+                  console.log(resp);
+                  if (resp.result == true) {
+                    alert("done");
+                      //window.location = "index.php?title=" + resp.message + "&message=กรุณายืนยันอีเมลภายใน 7 วัน อีเมล์ยืนยันจะถูกส่งให้ภายใน 5 - 10 นาที";
+                  }
+                }, error: function(error) {
+                  loading(false);
+                  console.log(error);
+                }
+              })
+              <?php
+            } else {
+          ?>
+          $.ajax({
+            url: "service-register.php",
+            type: "POST",
+            dataType: "JSON",
+            data: {
+              "idcard": idcard,
+              "prefix": prefix,
+              "name": name,
+              "lastname": lastname,
+              "age": age,
+              "sex": sex,
+              "email": email,
+              "password": password,
+            }, success: function(resp) {
+              loading(false);
+              console.log(resp);
+              if (resp.result == true) {
+                  window.location = "index.php?title=" + resp.message + "&message=กรุณายืนยันอีเมลภายใน 7 วัน อีเมล์ยืนยันจะถูกส่งให้ภายใน 5 - 10 นาที";
+              }
+            }, error: function(error) {
+              loading(false);
+              console.log(error);
+            }
+          })
+          <?php }; ?>
       })
 
       function displayError(show, message) {

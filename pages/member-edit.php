@@ -67,7 +67,7 @@ require 'connection.php'; ?>
                 <div class="col-lg-12">
                     <h1 class="page-header">รายงานข้อมูล</h1>
                     <div class="col-md-10 col-md-offset-1">
-                      <form class="form-horizontal" action="member-edit1.php" method="get">
+                      <form class="form-horizontal" action="member-edit.php" method="get">
 
                         <div class="form-group">
 

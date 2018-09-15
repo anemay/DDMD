@@ -29,7 +29,7 @@ if ($_POST) {
     echo json_encode($obj);
   } else {
     $obj["result"] = false;
-    $sql = "SELECT * FROM member WHERE email='$email' AND password='$password' and status = 0";
+    $sql = "SELECT * FROM member WHERE email='$email' and status = 0";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) { //
       $obj["message"] = "อีเมล์นี้ ยังไม่ได้ทำการยืนยัน กรุณาเข้าอีเมล์เพื่อยืนยันตัวตน";

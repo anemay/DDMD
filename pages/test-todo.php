@@ -205,6 +205,7 @@ if (isset($_POST["test_id"])) {
               test_time: testTime,
               data: arr
             }, success: function(resp) {
+              console.log(resp);
               if (resp.result) {
                 window.location = "test-selection.php?id=<?= $testId; ?>";
               }
