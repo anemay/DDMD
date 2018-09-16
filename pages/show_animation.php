@@ -11,7 +11,7 @@ require 'connection.php'; ?>
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>RMUTK</title>
+    <title>SB Admin 2 - Bootstrap Admin Theme</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -65,77 +65,69 @@ require 'connection.php'; ?>
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">รายงานข้อมูล</h1>
+                    <h1 class="page-header">อนิเมชั่น</h1>
                     <div class="col-md-10 col-md-offset-1">
-                      <form class="form-horizontal" action="member-edit.php" method="get">
+                      <form class="form-horizontal">
 
                         <div class="form-group">
-
                           <label for="" class="col-sm-2 control-label">ค้นหา</label>
                           <div class="col-sm-5">
-                              <input type="text" class="form-control" id="search" name="search" placeholder="ชื่อ-นามสกุล">
+                              <input type="text" class="form-control" id="search" name="search" placeholder="ชื่อเรื่อง">
                           </div>
 
                           <div class="col-sm-5">
-                              <button type="submit" id="btn-register" class="btn btn-primary">ค้นหา</button>
-                            </div>
+                              <button type="button" id="btn-register" class="btn btn-primary">ค้นหา</button>
+                          </div>
+                        </div>
 
-                            <div class="col-lg-12 table-responsive">
-                              <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                      <th>ลำดับ</th>
-                                      <th>ชื่อ</th>
-                                      <th>นามสกุล</th>
-                                      <th>อีเมล</th>
-                                      <th>อื่นๆ</th>
-                                    </tr>
-                                  </thead>
+                        <div class="col-lg-12 table-bordered table-responsive">
+                          <table class="table table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                  <th>ลำดับ</th>
+                                  <th>ชื่อเรื่อง</th>
+                                  <th>ลิ้งค์(URL)</th>
+                                  <th>อื่นๆ</th>
+                                </tr>
+                              </thead>
 
-                                  <tbody>
-                                    <?php
-                                    $where = "";
-                                    if (isset($_GET["search"])) {
-                                      $search = $_GET["search"];
-                                      $where .= " WHERE name like '%$search%' or lastname like '%$search%'";
+                              <tbody>
+                                <?php
+                                  $where = "";
+                                  if (isset($_GET["search"])) {
+                                    $search = $_GET["search"];
+                                    $where .= "WHERE topic like '%$search%'";
+                                  }
+                                  $sql = "SELECT * FROM test,video where test.id=video.test_id".$where;
+                                  $result = $conn->query($sql);
+                                  if ($result->num_rows > 0) {
+                                    $count = 1;
+                                    while ($row = $result->fetch_assoc()) {
+                                      echo '<tr>';
+                                      echo '<td>'.$count.'</td>';
+                                      echo '<td>'.$row["topic"].'</td>';
+                                      echo '<td>'.$row["link"].'</td>';
+                                      echo '<td>';
+                                      ?>
+                                        <a href="animation_add.php?id=<?php echo $row['test_id']; ?>"><button type="button" class="btn btn-warning"><i class="fa fa-pencil"></i></button></a>
+
+                                      <?php
+                                      echo '</td>';
+                                      echo '</tr>';
+                                      $count++;
                                     }
-                                      $sql = "SELECT * FROM member $where";
-                                      $result = $conn->query($sql);
-                                      if ($result->num_rows > 0) {
-                                        $count = 1;
-                                        while ($row = $result->fetch_assoc()) {
-                                          echo '<tr>';
-                                          echo '<td>'.$count.'</td>';
-                                          echo '<td>'.$row["name"].'</td>';
-                                          echo '<td>'.$row["lastname"].'</td>';
-                                          echo '<td>'.$row["email"].'</td>';
-                                          echo '<td>';
-                                          if ($row["status"] == 2) {
-                                            ?>
-                                            <a class="btn btn-warning" href="register.php?id=<?php echo $row['id']; ?>"><i class="fa fa-pencil"></i></a>
-                                            <a class="btn btn-danger" onclick="refreshId(<?php echo $row['id']; ?>)"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></a>
-                                            <a class="btn btn-danger" onclick="deleteId(<?php echo $row['id']; ?>)"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
-                                            <?php
-                                          } else {
-                                          ?>
-                                            <a class="btn btn-warning" href="register.php?id=<?php echo $row['id']; ?>"><i class="fa fa-pencil"></i></a>
-                                            <a class="btn btn-danger" onclick="removeId(<?php echo $row['id']; ?>)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
-                                          <?php
-                                          }
-                                          echo '</td>';
-                                          echo '</tr>';
-                                          $count++;
-                                        }
-                                      }
-                                     ?>
+                                  }
 
-                                  </tbody>
 
-                              </table>
-                            </div>
+                                 ?>
+
+                              </tbody>
+
+                          </table>
+                        </div>
 
                         <div class="form-group">
-                          <label for="" class="col-sm-2 control-label"></label>
+                          <label for="" class="col-sm-3 control-label"></label>
                           <div class="col-sm-9">
                             <div class="alert alert-danger" style="display: none" id="alert" role="alert"></div>
                           </div>
@@ -259,61 +251,48 @@ require 'connection.php'; ?>
         }
       }
 
-      function removeId(id) {
-        $.ajax({
-          url: "member_remove.php",
-          dataType: "JSON",
-          type: "POST",
-          data: {
-            id: id
-          }, success: function(resp) {
-            console.log(resp);
-            if (resp.result) {
-              alert("แก้ไขข้อมูลเสร็จสิ้น");
-              window.location="member-edit.php";
+      $(document).ready(function(){
+        var title = getUrlParameter('title');
+        var message = getUrlParameter('message');
+        if (title !== undefined && message !== undefined) {
+          $('#modal-message').modal('show');
+          $('#message-title').text(title);
+          $('#message-content').text(message);
+        }
+        function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
             }
-          }, error: function(error) {
-            console.log(error);
-          }
-        })
-      }
-      function refreshId(id) {
-        $.ajax({
-          url: "member_refresh.php",
-          dataType: "JSON",
-          type: "POST",
-          data: {
-            id: id
-          }, success: function(resp) {
-            console.log(resp);
-            if (resp.result) {
-              alert("ข้อมูลได้คืนเข้าสู่ระบบแล้ว");
-              window.location="member-edit.php";
-            }
-          }, error: function(error) {
-            console.log(error);
-          }
-        })
-      }
-      function deleteId(id) {
-        $.ajax({
-          url: "member_delete.php",
-          dataType: "JSON",
-          type: "POST",
-          data: {
-            id: id
-          }, success: function(resp) {
-            console.log(resp);
-            if (resp.result) {
-              alert("ลบข้อมูลเสร็จสิ้่น");
-              window.location="member-edit.php";
-            }
-          }, error: function(error) {
-            console.log(error);
-          }
-        })
-      }
+        }
+      })
     </script>
+    <!-- Modal -->
+    <div class="modal fade" id="modal-message" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="message-title"></h4>
+          </div>
+          <div class="modal-body" id="message-content">
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">ปิด</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
 </body>
 

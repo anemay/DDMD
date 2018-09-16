@@ -98,22 +98,39 @@ if ($_GET) {
                                   <div class="media-body">
                                     <?php
 
-                                      $sql = "SELECT * FROM score, member Where score.member_id = member.id and member.id=$id" ;
+                                      $sql = "SELECT * FROM score, member, score_type Where score.member_id = member.id and score.score_type = score_type.id and member.id=$id" ;
                                       $result = $conn->query($sql);
                                       if ($result->num_rows > 0) { //
                                         $member = $result->fetch_assoc();
                                       }
+                                      $sql = "SELECT MAX(score) as max FROM score WHERE member_id = $id and score_type = 1 " ;
+                                      $result = $conn->query($sql);
+                                      if ($result->num_rows > 0) { //
+                                        $score = $result->fetch_assoc();
+                                        $maxScore = $score["max"];
+                                      }
                                      ?>
-                                      <h4 class="mt-1 mb-1 text-white"><?= $member["name"]; ?></h4>
-                                        <p class="font-13 text-white-50"> EMAIL</p>
+                                      <h4 class="mt-1 mb-1 text-white"><?= $member["name"] ."&nbsp;". $member["lastname"]; ?></h4>
+                                        <p class="font-13 text-white-50"><?= $member["email"] ; ?></p>
 
                                       <ul class="mb-0 list-inline text-light">
                                         <li class="list-inline-item mr-3">
-                                      <h5 class="mb-1">xxxx</h5>
+                                      <h5 class="mb-1"><?= $maxScore; ?></h5>
                                           <p class="mb-0 font-13 text-white-50">คะแนนก่อนทำแบบทดสอบ</p>
                                         </li>
+
+                                        <?php
+
+                                          $sql = "SELECT MAX(score) as max FROM score WHERE member_id = $id and score_type = 2 " ;
+                                          $result = $conn->query($sql);
+                                          if ($result->num_rows > 0) { //
+                                            $score = $result->fetch_assoc();
+                                            $maxScore = $score["max"];
+                                          }
+                                         ?>
+
                                         <li class="list-inline-item">
-                                        <h5 class="mb-1">xxxxx</h5>
+                                        <h5 class="mb-3"><?= $maxScore ; ?></h5>
                                           <p class="mb-0 font-13 text-white-50">คะแนนหลังทำแบบทดสอบ</p>
                                         </li>
                                         </ul>
