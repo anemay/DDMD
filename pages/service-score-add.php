@@ -27,9 +27,11 @@ if ($_POST) {
       array_push($check, $item);
     }
   }
-  $score_type = $testType == "pre_test" ? 1 : 2;
-  $sql_insert_score = "INSERT INTO score(member_id, test_id, score, score_type, time) values($memberId, $testId, $score, $score_type, $testTime)";
-  $result = $conn->query($sql_insert_score);
+  if (!isset($_SESSION["admin"])) {
+    $score_type = $testType == "pre_test" ? 1 : 2;
+    $sql_insert_score = "INSERT INTO score(member_id, test_id, score, score_type, time) values($memberId, $testId, $score, $score_type, $testTime)";
+    $result = $conn->query($sql_insert_score);
+  }
   $response["result"] = true;
   $response["score"] = $score;
   $response["check"] = $check;
