@@ -78,16 +78,17 @@ require 'connection.php'; ?>
 
                           <div class="col-sm-5">
                               <button type="submit" id="btn-search" class="btn btn-primary">ค้นหา</button>
-                              <label for="inputPassword3" class="col-sm-3 control-label">ประเภทบุคคล</label>
+                              <!-- / <label for="inputPassword3" class="col-sm-3 control-label">ประเภทบุคคล</label>
                               <div class="col-sm-4">
                                 <select id="prefix" class="form-control" >
                                   <option value="1">นักเรียน</option>
                                   <option value="2">อาจารย์</option>
                                   <option value="3">บุคคลทั่วไป</option>
                                 </select>
-                              </div>
-                        </div>
+                              </div> -->
 
+                        </div>
+                        <br> <br> <br> 
                       <div class="col-lg-12 table-responsive">
                           <table class="table table-hover table-bordered">
                             <thead>
@@ -119,7 +120,7 @@ require 'connection.php'; ?>
                                       echo '<td>'.$row["email"].'</td>';
                                       echo '<td>';
                                       ?>
-                                      <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-print  " aria-hidden="true"></span></button>
+                                      <button type="button" class="btn btn-danger"><a href="report_single.php?id=<?php echo $row['id']; ?>"><span class="glyphicon glyphicon-print" aria-hidden="true"></span></button>
                                       <?php
                                       echo '</td>';
                                       echo '</tr>';
@@ -131,8 +132,8 @@ require 'connection.php'; ?>
                               </tbody>
                               </table>
                           <div class="col-sm-6 col-md-offset-4">
-                              <button ty pe="button" class="btn btn-primary">รายชื่อสมาชิกทั้งหมด</button>
-                              <button ty pe="button" class="btn btn-primary">5 อันดับแรก</button>
+                              <button type="button" class="btn btn-primary">รายชื่อสมาชิกทั้งหมด</button>
+                              <button type="button" class="btn btn-primary">5 อันดับแรก</button>
                           </div>
 
 

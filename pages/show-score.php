@@ -1,12 +1,29 @@
 <?php session_start();
 require 'connection.php';
-
-if ($_GET) {
+$idcard = "";
+$name = "";
+$lastname = "";
+$age= "";
+$sex = "";
+$status = "";
+$email = "";
+$password = "";
+$type = "";
+if (isset($_GET["id"])) {
   $id = $_GET["id"];
-} else {
-  $id = $_SESSION["member_id"];
+  $sql = "SELECT * FROM member where id= $id";
+  $result = $conn->query($sql);
+    if ($result->num_rows > 0) { //
+      $data = $result->fetch_assoc();
+      $idcard = $data["idcard"];
+      $name = $data["name"];
+      $lastname = $data["lastname"];
+      $age = $data["age"];
+      $sex = $data["sex"];
+      $email = $data["email"];
+      $password = $data["password"];
+    }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -85,7 +102,7 @@ if ($_GET) {
                       <div class="row">
                         <div class="col-sm-12">
                                 <!-- Profile -->
-                          <div class="card bg-primary">
+                          <div class="card bg-primary" style="padding: 10px">
                             <div class="card-body profile-user-box">
 
                               <div class="row">
@@ -96,44 +113,10 @@ if ($_GET) {
                                     </span>
 
                                   <div class="media-body">
-                                    <?php
+                                      <h4 class="mt-1 mb-1 text-white"><?=$name ."&nbsp;". $lastname; ?></h4>
+                                      <p class="font-13 text-white-50"><?= $email ; ?></p>
 
-                                      $sql = "SELECT * FROM score, member, score_type Where score.member_id = member.id and score.score_type = score_type.id and member.id=$id" ;
-                                      $result = $conn->query($sql);
-                                      if ($result->num_rows > 0) { //
-                                        $member = $result->fetch_assoc();
-                                      }
-                                      $sql = "SELECT MAX(score) as max FROM score WHERE member_id = $id and score_type = 1 " ;
-                                      $result = $conn->query($sql);
-                                      if ($result->num_rows > 0) { //
-                                        $score = $result->fetch_assoc();
-                                        $maxScore = $score["max"];
-                                      }
-                                     ?>
-                                      <h4 class="mt-1 mb-1 text-white"><?= $member["name"] ."&nbsp;". $member["lastname"]; ?></h4>
-                                        <p class="font-13 text-white-50"><?= $member["email"] ; ?></p>
 
-                                      <ul class="mb-0 list-inline text-light">
-                                        <li class="list-inline-item mr-3">
-                                      <h5 class="mb-1"><?= $maxScore; ?></h5>
-                                          <p class="mb-0 font-13 text-white-50">คะแนนก่อนทำแบบทดสอบ</p>
-                                        </li>
-
-                                        <?php
-
-                                          $sql = "SELECT MAX(score) as max FROM score WHERE member_id = $id and score_type = 2 " ;
-                                          $result = $conn->query($sql);
-                                          if ($result->num_rows > 0) { //
-                                            $score = $result->fetch_assoc();
-                                            $maxScore = $score["max"];
-                                          }
-                                         ?>
-
-                                        <li class="list-inline-item">
-                                        <h5 class="mb-3"><?= $maxScore ; ?></h5>
-                                          <p class="mb-0 font-13 text-white-50">คะแนนหลังทำแบบทดสอบ</p>
-                                        </li>
-                                        </ul>
 
                                     </div> <!-- end media-body-->
 
@@ -160,41 +143,56 @@ if ($_GET) {
             <br>
             <br>
 
-            <div class="col-lg-12 table-responsive">
-                <table class="table table-hover table-bordered">
-                  <thead>
-                      <tr>
-                        <th>ลำดับ</th>
-                        <th>คะแนนหลังทำแบบทดสอบ</th>
-                        <th>วันที่ทำแบบทดสอบ</th>
-                        </tr>
-                    </thead>
+            <?php
+              $sql_select_test = "SELECT * FROM test";
+              $resultTest = $conn->query($sql_select_test);
+              if ($resultTest) {
+                while ($test = $resultTest->fetch_assoc()) {
+                  $testId = $test['id'];
+                  $sql_pretest = "SELECT * FROM score WHERE score_type = 1 and member_id = $id and test_id = $testId";
+                  $resultPretest = $conn->query($sql_pretest);
+                  $pretest = $resultPretest->fetch_assoc();
+                  echo '<div class="col-lg-4">
+                    <div class="well">
+                      <div><h3>'.$test["topic"].'</h3></div>
+                      <hr/>
+                      <div><h5>คะแนนก่อนเรียน: '.$pretest ["score"].'</5></div>
+                    </div>
+                    </div>';
+                  echo '<div class="col-lg-8 table-responsive">
+                      <table class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                              <th>ลำดับ</th>
+                              <th>คะแนนหลังทำแบบทดสอบ</th>
+                              <th>เวลาที่ใช้ในการทำแบบทดสอบ</th>
+                              <th>วันที่ทำแบบทดสอบ</th>
+                              </tr>
+                          </thead>
+                          <tbody>';
 
-                    <tbody>
-                      <?php
-                        $where = "";
-                        if (isset($_GET["search"])) {
-                          $search = $_GET["search"];
-                          $where .= " WHERE name like '%$search%' or lastname like '%$search%'";
-                        }
-                        $sql = "SELECT * FROM score" . $where;
-                        $result = $conn->query($sql);
-                        if ($result->num_rows > 0) {
-                          $count = 1;
-                          while ($row = $result->fetch_assoc()) {
-                            echo '<tr>';
-                            echo '<td>'.$count.'</td>';
-                            echo '<td>'.$row["score_type"].'</td>';
-                            echo '<td>'.$row["date"].'</td>';
-                            $count++;
-                          }
-                        }
-                       ?>
+                  $count = 1;
+                  $sql_postest = "SELECT * FROM score WHERE score_type = 2 and member_id = $id and test_id = $testId";
+                  $resultPostest = $conn->query($sql_postest);
+                  if ($resultPostest) {
+                    while ($postest = $resultPostest->fetch_assoc()) {
+                      echo '<tr>';
+                      echo '<td>'.$count++.'</td>';
+                      echo '<td>'.$postest["score"].'</td>';
+                      echo '<td>'.$postest["time"].'</td>';
+                      echo '<td>'.$postest["date"].'</td>';
+                      echo '</tr>';
+                    }
+                  }
 
-                    </tbody>
-                    </table>
+                  echo '</tbody>
+                          </table>
+                      </div>';
+                  echo '<div class="col-md-12"></div>';
+                }
+              }
+             ?>
 
-                </div>
         </div>
         <!-- /#page-wrapper -->
     </div>

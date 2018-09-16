@@ -69,38 +69,55 @@ if (isset($_GET["id"])) {
 
         <div id="">
             <div class="row">
-                <div class="col-lg-12">
-                  <h2 class="page-header col-md-offset-4">รายงานข้อมูลเรื่องการใช้ยาผิดคุณลักษณะวิธี</h2>';
+                <div class="col-xs-12">
+                  <h3 class="text-center">การพัฒนาสื่อการเรียนรู้เรื่อง</h3>
+                  <h4 class="text-center">อันตรายจากลักษณะการใช้ยาในทางที่ผิด</h4>
+
+                    <br> <br>
+
+                      <div class="card-body profile-user-box">
+
+                        <div class="row">
+                          <div class="col-sm-12">
+                                  <!-- Profile -->
 
 
-                  <div class="col-md-5 col-md-offset-3">
+                                <div class="row">
+                                  <div class="col-sm-8">
+                                    <div class="media">
 
-                    <form class="form-horizontal">
-                      <!-- name - sname -->
-                      <div class="form-group">
-                        <label for="" class="col-sm-3 control-label">ชื่อ-นามสกุล</label>
-                        <div class="col-sm-9">
-                          <label for="" class="col-sm-9 control-label">ชื่อ-นามสกุล</label>
+
+                                    <div class="col-xs-12 media-body">
+                                      <?php
+
+
+                                       ?>
+                                        <h4 class="mt-1 mb-1 text-white"><?= $name ."&nbsp;".$lastname; ?></h4>
+                                        <h5 class="mt-1 mb-1 text-white"><?= $email ; ?></h5>
+
+
+
+                                      </div> <!-- end media-body-->
+
+
+                                    </div> <!-- end col-->
+
+
+                                  </div> <!-- end row -->
+
+                                </div> <!-- end card-body/ profile-user-box-->
+
+
                           </div>
-                      </div>
-                      <!-- pretest -->
-                      <div class="form-group">
-                        <label for="" class="col-sm-3 control-label">คะแนนก่อนทำ</label>
-                        <div class="col-sm-9">
-                          <label for="" class="col-sm-9 control-label">คะแนนก่อนทำ</label>
-                        </div>
-                      </div>
-                      <!-- posttest -->
-                      <div class="form-group">
-                        <label for="" class="col-sm-3 control-label">คะแนนหลังทำ</label>
-                        <div class="col-sm-9">
-                          <label for="" class="col-sm-9 control-label">คะแนนหลังทำ</label>
-                        </div>
-                      </div>
+                          <!-- end row -->
 
-                    </form>
+
+                    </div>
+
 
                   </div>
+                  <!-- /.col-lg-12 -->
+
               </div>
                   </form>
                     </div>
@@ -108,6 +125,64 @@ if (isset($_GET["id"])) {
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
+            <br>
+            <br>
+            <br>
+            <br>
+
+            <?php
+              $sql_select_test = "SELECT * FROM test";
+              $resultTest = $conn->query($sql_select_test);
+              if ($resultTest) {
+                while ($test = $resultTest->fetch_assoc()) {
+                  $testId = $test['id'];
+                  $sql_pretest = "SELECT * FROM score WHERE score_type = 1 and member_id = $id and test_id = $testId";
+                  $resultPretest = $conn->query($sql_pretest);
+                  $pretest = $resultPretest->fetch_assoc();
+                  echo '<div class="col-xs-4">
+                    <div class="well">
+                      <div><h3>'.$test["topic"].'</h3></div>
+                      <hr/>
+                      <div><h5>คะแนนก่อนเรียน: '.$pretest ["score"].'</5></div>
+                    </div>
+                    </div>';
+                  echo '<div class="col-xs-8 table-responsive">
+                      <table class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                              <th>ลำดับ</th>
+                              <th>คะแนนหลังทำแบบทดสอบ</th>
+                              <th>เวลาที่ใช้ในการทำแบบทดสอบ</th>
+                              <th>วันที่ทำแบบทดสอบ</th>
+                              </tr>
+                          </thead>
+                          <tbody>';
+
+                  $count = 1;
+                  $sql_postest = "SELECT * FROM score WHERE score_type = 2 and member_id = $id and test_id = $testId";
+                  $resultPostest = $conn->query($sql_postest);
+                  if ($resultPostest) {
+                    while ($postest = $resultPostest->fetch_assoc()) {
+                      echo '<tr>';
+                      echo '<td>'.$count++.'</td>';
+                      echo '<td>'.$postest["score"].'</td>';
+                      echo '<td>'.$postest["time"].'</td>';
+                      echo '<td>'.$postest["date"].'</td>';
+                      echo '</tr>';
+                    }
+                  }
+
+                  echo '</tbody>
+                          </table>
+                      </div>';
+                  echo '<div class="col-md-12"></div>';
+                }
+              }
+             ?>
+
+        </div>
+        <!-- /#page-wrapper -->
+    </div>
 
         </div>
         <!-- /#page-wrapper -->

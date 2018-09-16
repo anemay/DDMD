@@ -9,6 +9,7 @@ $status = "";
 $email = "";
 $password = "";
 $type = "";
+$disabled = "";
 if (isset($_GET["id"])) {
   $id = $_GET["id"];
   $sql = "SELECT * FROM member where id= $id";
@@ -23,6 +24,7 @@ if (isset($_GET["id"])) {
       $email = $data["email"];
       $password = $data["password"];
     }
+    $disabled = " disabled";
 }
 ?>
 <!DOCTYPE html>
@@ -102,7 +104,7 @@ if (isset($_GET["id"])) {
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">รหัสประชาชน</label>
                           <div class="col-sm-9">
-                            <input type="text" class="form-control" id="idcard" value="<?= $idcard;?>" placeholder="รหัสประชาชน" maxlength="13">
+                            <input type="text" class="form-control" id="idcard" value="<?= $idcard;?>" placeholder="รหัสประชาชน" maxlength="13" <?= $disabled;?>>
                           </div>
                         </div>
                         <div class="form-group">
@@ -110,7 +112,7 @@ if (isset($_GET["id"])) {
                           <div class="col-sm-9">
 
                             <!-- <select id="prefix" class="form-control" > -->
-                            <select class="form-control" name="prefix" id="prefix">
+                            <select class="form-control" name="prefix" id="prefix" <?= $disabled;?>>
                               <?php
                                 $sql = "SELECT * FROM prefix";
                                 $result = $conn->query($sql);
@@ -144,7 +146,7 @@ if (isset($_GET["id"])) {
                         <div class="form-group">
                           <label for="" class="col-sm-3 control-label">วัน/เดือน/ปีเกิด</label>
                         <div class="col-sm-9">
-                            <input class="form-control" type="date" name="age" id="age">
+                            <input class="form-control" type="date" name="age" id="age" <?= $disabled;?>>
                             <!-- <?php
                               $sql = "SELECT * FROM age";
                               $result = $conn->query($sql);
@@ -165,7 +167,7 @@ if (isset($_GET["id"])) {
                           <label for="inputPassword3" class="col-sm-3 control-label">ประเภทบุคคล</label>
                           <div class="col-sm-9">
 
-                            <select class="form-control" name="type" id="type">
+                            <select class="form-control" name="type" id="type" <?= $disabled;?>>
                               <?php
                                 $sql = "SELECT * FROM type";
                                 $result = $conn->query($sql);
@@ -191,9 +193,9 @@ if (isset($_GET["id"])) {
                                 while ($row = $result->fetch_assoc()) {
                                   echo '<label class="radio-inline">';
                                   if ($sexCount == 1) {
-                                    echo '<input type="radio" name="radio-sex" value="'.$row["id"].'" checked="checked">'.$row["sex"].'</input>';
+                                    echo '<input type="radio" name="radio-sex" value="'.$row["id"].'" checked="checked" '.$disabled.'>'.$row["sex"].'</input>';
                                   } else {
-                                    echo '<input type="radio" name="radio-sex" value="'.$row["id"].'">'.$row["sex"].'</input>';
+                                    echo '<input type="radio" name="radio-sex" value="'.$row["id"].'" '.$disabled.'>'.$row["sex"].'</input>';
                                   }
                                   echo '</label>';
                                   $sexCount++;
@@ -212,7 +214,7 @@ if (isset($_GET["id"])) {
                               if (isset($_GET["id"])) {
                                 echo '<input type="email" class="form-control" id="email" value="'.$email.'" placeholder="อีเมล" maxlength="50" disabled>';
                               } else {
-                                echo '<input type="email" class="form-control" id="email" value="'.$email.'" placeholder="อีเมล" maxlength="50">';            
+                                echo '<input type="email" class="form-control" id="email" value="'.$email.'" placeholder="อีเมล" maxlength="50">';
                               }
                              ?>
                           </div>
