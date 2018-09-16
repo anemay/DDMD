@@ -114,8 +114,12 @@ if (isset($_GET["id"])) {
                           <form>';
                         }
                       } else {
+                        if (isset($_SESSION["admin"])) {
+                          echo '<div class="col-md-12" id="player"></div>';
+                          $allowSkip = true;
+                        }
                         echo '<form action="test-todo.php" method="post">
-                          <div class="col-md-12" align="center">
+                          <div class="col-md-12" align="center"  style="margin-top: 10px">
                             <input type="hidden" name="test_id" value="'.$testId.'">
                             <input type="hidden" name="test_type" value="pre_test">
                             <button type="submit" id="btn-post-test" class="btn btn-default btn-lg">

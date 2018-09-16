@@ -1,4 +1,5 @@
-<?php session_start(); ?>
+<?php session_start();
+require 'connection.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,6 +24,8 @@
 
     <!-- Morris Charts CSS -->
     <link href="../vendor/morrisjs/morris.css" rel="stylesheet">
+
+    <script src="http://www.youtube.com/player_api"></script>
 
     <!-- Custom Fonts -->
     <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -82,9 +85,18 @@
 
         <div id="page-wrapper">
             <div class="row">
+                <?php
+                  $sql_select_video = "SELECT * FROM video WHERE show_first = 1";
+                  $result = $conn->query($sql_select_video);
+                  $slink = "";
+                  if ($result) {
+                    $video = $result->fetch_assoc();
+                    $slink = $video["slink"];
+                  }
+                 ?>
                 <div class="col-lg-12">
                     <h1 class="page-header">Video ตัวอย่าง</h1>
-                    <iframe width="1200" height="600" src="https://www.youtube.com/embed/zWZzL-jNf30" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    <div class="col-md-12" id="player"></div>
               </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -174,7 +186,6 @@
           $('#message-title').text(title);
           $('#message-content').text(message);
         }
-
       })
 
       function getUrlParameter(sParam) {
@@ -221,6 +232,47 @@
 
 
       })
+    </script>
+
+    <script>
+        // create youtube player
+        var player;
+        function onYouTubePlayerAPIReady() {
+            player = new YT.Player('player', {
+              height: '390',
+              width: '640',
+              videoId: qs('v'),
+              playerVars: {
+                  'autoplay': 0,
+                  'controls': 1,
+                  'rel' : 0,
+                  'fs' : 0,
+              },
+              events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+              }
+            });
+        }
+
+        function qs(key) {
+            key = key.replace(/[*+?^$.\[\]{}()|\\\/]/g, "\\$&"); // escape RegEx meta chars
+            var match = ('<?= $slink;?>').match(new RegExp("[?&]"+key+"=([^&]+)(&|$)"));
+            return match && decodeURIComponent(match[1].replace(/\+/g, " "));
+        }
+
+        // autoplay video
+        function onPlayerReady(event) {
+            event.target.playVideo();
+        }
+
+        // when video ends
+        function onPlayerStateChange(event) {
+            if(event.data === 0) {
+              $('#btn-post-test').fadeIn();
+            }
+        }
+
     </script>
 
 </body>
