@@ -92,7 +92,7 @@
                         <a href="register.php?id=<?= $_SESSION['member_id']; ?>"><i class="fa fa-pencil fa-fw"></i> แก้ไข</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-exchange"></i> เปลี่ยนรหัสผ่าน</a>
+                        <a href="update_password.php?id=<?= $_SESSION['member_id']; ?>"><i class="fa fa-exchange"></i> เปลี่ยนรหัสผ่าน</a>
                     </li>
                     <li>
                         <a href="show-score.php"><i class="fa fa-bar-chart-o"></i> แสดงข้อมูลคะแนน </a>
